@@ -28,7 +28,34 @@ const addPost = (inputID, inputName, inputContents) => {
   return timeLinePosts;
 };
 
+// 게시글 삭제
+const removePost = (specificPostUniqueKey) => {
+  timeLinePosts.post = timeLinePosts.post.filter((post) =>
+    post.uniqueKey != specificPostUniqueKey);
+  
+  return timeLinePosts;
+};
+
+// 게시글 수정
+const editPost = (uniqueKey, temptState) => {
+  timeLinePosts.post.forEach((post) => {
+    post.uniqueKey != uniqueKey
+    ? post
+    : post.contents = temptState;
+  });
+
+  // timeLinePosts.post.forEach((post) => {
+  //   post.uniqueKey != uniqueKey
+  //   ? post
+  //   : post.isEditButtonClicked = false;
+  // });
+
+  return timeLinePosts;
+}
+
 module.exports = {
   getPosts,
   addPost,
+  removePost,
+  editPost,
 };

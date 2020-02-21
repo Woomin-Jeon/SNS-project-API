@@ -9,6 +9,8 @@ const {
 const {
   getPosts,
   addPost,
+  removePost,
+  editPost,
 } = require('./posts');
 
 const port = 3000;
@@ -36,6 +38,18 @@ app.get('/posts', (req, res) => {
 app.post('/posts', (req, res) => {
   const { id, name, contents } = req.body;
   const timeLinePosts = addPost(id, name, contents);
+  res.send({ timeLinePosts });
+});
+
+app.delete('/posts/:uniquekey', (req, res) => {
+  const specificPostUniqueKey = req.params.uniquekey;
+  const timeLinePosts = removePost(specificPostUniqueKey);
+  res.send({ timeLinePosts });
+});
+
+app.patch('/posts', (req, res) => {
+  const { uniqueKey, temptState } = req.body;
+  const timeLinePosts = editPost(uniqueKey, temptState);
   res.send({ timeLinePosts });
 });
 
