@@ -9,7 +9,7 @@ const postComments = {
 
 let uniqueCount = 0;
 
-// GET
+// GET Posts
 const getPosts = () => {
   return timeLinePosts;
 };
@@ -74,6 +74,11 @@ const addScrap = (whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedP
   return timeLinePosts;
 }
 
+// GET Comments
+const getComments = () => {
+  return postComments;
+}
+
 // 댓글 추가
 const addComment = (uniqueKey, currentUserID, currentUserName, commentContents) => {
   postComments.comment = [
@@ -85,7 +90,7 @@ const addComment = (uniqueKey, currentUserID, currentUserName, commentContents) 
       writer: currentUserName, // 댓글 쓰는 사람의 Name
       statement: commentContents, // 댓글의 내용
       childComment: [], // 대댓글이 담길 배열
-      isChildCommentFunctionOn: false, // 대댓글 기능 On?
+      isChildCommentFunctionOn: false, // 대댓글 창 Open?
       commentThumbCount: [], // 좋아요 누른 사람의 ID가 담길 배열
     }
   ];
@@ -102,7 +107,25 @@ const plusCommentCount = (uniqueKey) => {
   });
   
   return timeLinePosts;
-};;
+};
+
+// 대댓글 추가
+const addChildComment = (uniqueKey, contents, currentUserID, currentUserName) => {
+  postComments.comment.forEach((comment) => {
+    comment.uniqueKey != uniqueKey
+    ? comment
+    : comment.childComment = [
+      ...comment.childComment,
+      {
+        id: currentUserID,
+        name: currentUserName,
+        statement: contents,
+      },
+    ];
+  });
+
+  return postComments;
+};
 
 module.exports = {
   getPosts,
@@ -110,6 +133,8 @@ module.exports = {
   removePost,
   editPost,
   addScrap,
+  getComments,
   addComment,
   plusCommentCount,
+  addChildComment,
 };

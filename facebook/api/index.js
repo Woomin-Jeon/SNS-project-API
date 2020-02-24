@@ -12,8 +12,10 @@ const {
   removePost,
   editPost,
   addScrap,
+  getComments,
   addComment,
   plusCommentCount,
+  addChildComment,
 } = require('./timeline');
 
 const port = 3000;
@@ -62,6 +64,11 @@ app.post('/scraps', (req, res) => {
   res.send({ timeLinePosts });
 });
 
+app.get('/comments', (req, res) => {
+  const postComments = getComments();
+  res.send({ postComments });
+})
+
 app.post('/comments', (req, res) => {
   const { uniqueKey, currentUserID, currentUserName, commentContents } = req.body;
   const postComments = addComment(uniqueKey, currentUserID, currentUserName, commentContents);
@@ -73,6 +80,12 @@ app.patch('/comments', (req, res) => {
   const timeLinePosts = plusCommentCount(uniqueKey);
   res.send({ timeLinePosts });
 });
+
+app.post('/childcomments', (req, res) => {
+  const { uniqueKey, contents, currentUserID, currentUserName } = req.body;
+  const postComments = addChildComment(uniqueKey, contents, currentUserID, currentUserName);
+  res.send({ postComments });
+})
 
 app.listen(port, () => {
   console.log(`Server is running at port ${port}...`);
