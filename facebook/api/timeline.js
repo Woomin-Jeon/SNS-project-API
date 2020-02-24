@@ -3,17 +3,18 @@ const timeLinePosts = {
   scrap: [],
 }
 
+let uniqueCount = 0;
+
+// GET
 const getPosts = () => {
   return timeLinePosts;
 };
 
 // 게시글 추가
 const addPost = (inputID, inputName, inputContents) => {
-  const maxKey = timeLinePosts.post.length;
-
   timeLinePosts.post = [
     {
-      uniqueKey: maxKey + 1,
+      uniqueKey: uniqueCount++,
       id: inputID, // 이 게시글을 누가 썼는지 식별
       name: inputName, // 이 게시글을 쓴 User의 이름
       contents: inputContents, // 게시글의 내용
@@ -23,7 +24,7 @@ const addPost = (inputID, inputName, inputContents) => {
       isEditButtonClicked: false, // 수정버튼이 눌렸는가?
     },
     ...timeLinePosts.post,
-  ]
+  ];
 
   return timeLinePosts;
 };
@@ -44,11 +45,27 @@ const editPost = (uniqueKey, temptState) => {
     : post.contents = temptState;
   });
 
-  // timeLinePosts.post.forEach((post) => {
-  //   post.uniqueKey != uniqueKey
-  //   ? post
-  //   : post.isEditButtonClicked = false;
-  // });
+  return timeLinePosts;
+}
+
+// 게시글 스크랩
+const addScrap = (whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey) => {
+  timeLinePosts.scrap = [
+    {
+      uniqueKey: uniqueCount++,
+      id: whoScrapedByID, // 스크랩 한 사람의 ID
+      whoDid: whoScrapedByName, // 스크랩 한 사람의 Name
+      name: whoWritePostByName, // 스크랩 된 게시글을 쓴 User의 Name
+      contents: ScrapedPostContents, // 스크랩 된 게시글의 내용
+    },
+    ...timeLinePosts.scrap,
+  ];
+
+  timeLinePosts.post.forEach((post) => {
+    post.uniqueKey != uniqueKey
+    ? post
+    : post.sharingCount = post.sharingCount + 1;
+  });
 
   return timeLinePosts;
 }
@@ -58,4 +75,5 @@ module.exports = {
   addPost,
   removePost,
   editPost,
+  addScrap,
 };

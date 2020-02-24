@@ -11,7 +11,8 @@ const {
   addPost,
   removePost,
   editPost,
-} = require('./posts');
+  addScrap,
+} = require('./timeline');
 
 const port = 3000;
 const app = express();
@@ -52,6 +53,12 @@ app.patch('/posts', (req, res) => {
   const timeLinePosts = editPost(uniqueKey, temptState);
   res.send({ timeLinePosts });
 });
+
+app.post('/scraps', (req, res) => {
+  const { whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey } = req.body;
+  const timeLinePosts = addScrap(whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey);
+  res.send({ timeLinePosts });
+})
 
 app.listen(port, () => {
   console.log(`Server is running at port ${port}...`);
