@@ -3,6 +3,10 @@ const timeLinePosts = {
   scrap: [],
 }
 
+const postComments = {
+  comment: [],
+};
+
 let uniqueCount = 0;
 
 // GET
@@ -70,10 +74,42 @@ const addScrap = (whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedP
   return timeLinePosts;
 }
 
+// 댓글 추가
+const addComment = (uniqueKey, currentUserID, currentUserName, commentContents) => {
+  postComments.comment = [
+    ...postComments.comment,
+    {
+      uniqueKey: uniqueCount++,
+      id: uniqueKey, // 어떤 게시글에 달린 댓글인지 확인하기 위한 것
+      writerID: currentUserID, // 댓글 쓰는 사람의 ID
+      writer: currentUserName, // 댓글 쓰는 사람의 Name
+      statement: commentContents, // 댓글의 내용
+      childComment: [], // 대댓글이 담길 배열
+      isChildCommentFunctionOn: false, // 대댓글 기능 On?
+      commentThumbCount: [], // 좋아요 누른 사람의 ID가 담길 배열
+    }
+  ];
+
+  return postComments;
+};
+
+// 댓글 추가시 댓글 개수 +1
+const plusCommentCount = (uniqueKey) => {
+  timeLinePosts.post.forEach((post) => {
+    post.uniqueKey != uniqueKey
+    ? post
+    : post.commentCount = post.commentCount + 1;
+  });
+  
+  return timeLinePosts;
+};;
+
 module.exports = {
   getPosts,
   addPost,
   removePost,
   editPost,
   addScrap,
+  addComment,
+  plusCommentCount,
 };

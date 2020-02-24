@@ -12,6 +12,8 @@ const {
   removePost,
   editPost,
   addScrap,
+  addComment,
+  plusCommentCount,
 } = require('./timeline');
 
 const port = 3000;
@@ -58,7 +60,19 @@ app.post('/scraps', (req, res) => {
   const { whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey } = req.body;
   const timeLinePosts = addScrap(whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey);
   res.send({ timeLinePosts });
-})
+});
+
+app.post('/comments', (req, res) => {
+  const { uniqueKey, currentUserID, currentUserName, commentContents } = req.body;
+  const postComments = addComment(uniqueKey, currentUserID, currentUserName, commentContents);
+  res.send({ postComments });
+});
+
+app.patch('/comments', (req, res) => {
+  const { uniqueKey } = req.body;
+  const timeLinePosts = plusCommentCount(uniqueKey);
+  res.send({ timeLinePosts });
+});
 
 app.listen(port, () => {
   console.log(`Server is running at port ${port}...`);
