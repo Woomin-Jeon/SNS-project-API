@@ -9,13 +9,19 @@ const userStore = {
     {
       id: 'ㅁ',
       pw: 'ㅁ',
-      userName: '김재원',
-      friends: ['a','q'],
+      userName: '김병찬',
+      friends: ['a','q','w'],
     },
     {
       id: 'q',
       pw: 'q',
-      userName: '박지희',
+      userName: '김대희',
+      friends: ['ㅁ'],
+    },
+    {
+      id: 'w',
+      pw: 'w',
+      userName: '김민성',
       friends: ['ㅁ'],
     },
   ],
@@ -40,7 +46,31 @@ const addUser = (inputID, inputPW, inputName) => {
   return userStore;
 }
 
+// 친구 추가
+const addFriend = (currentUserID ,friendID) => {
+  let index = userStore.users
+    .findIndex(user => user.id === currentUserID);
+
+  userStore.users[index].friends = 
+    [...userStore.users[index].friends, friendID];
+
+  return userStore;
+};
+
+// 친구 해제
+const removeFriend = (currentUserID, friendID) => {
+  let index = userStore.users
+    .findIndex(user => user.id === currentUserID);
+
+  userStore.users[index].friends =
+    userStore.users[index].friends.filter((v) => v != friendID);
+
+  return userStore;
+};
+
 module.exports = {
   getUsers,
   addUser,
+  addFriend,
+  removeFriend,
 };

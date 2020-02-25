@@ -4,6 +4,8 @@ const cors = require('cors');
 const {
   getUsers,
   addUser,
+  addFriend,
+  removeFriend,
 } = require('./login');
 
 const {
@@ -37,10 +39,22 @@ app.post('/login', (req, res) => {
   res.send({ userStore });
 });
 
+app.post('/friends', (req, res) => {
+  const { currentUserID, friendID } = req.body;
+  const userStore = addFriend(currentUserID, friendID);
+  res.send({ userStore });
+});
+
+app.patch('/friends', (req, res) => {
+  const { currentUserID, friendID } = req.body;
+  const userStore = removeFriend(currentUserID, friendID);
+  res.send({ userStore });
+});
+
 app.get('/posts', (req, res) => {
   const timeLinePosts = getPosts();
   res.send({ timeLinePosts });
-})
+});
 
 app.post('/posts', (req, res) => {
   const { id, name, contents } = req.body;
