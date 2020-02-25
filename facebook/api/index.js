@@ -11,6 +11,7 @@ const {
   addPost,
   removePost,
   editPost,
+  plusThumbCount,
   addScrap,
   getComments,
   addComment,
@@ -53,8 +54,8 @@ app.delete('/posts/:uniquekey', (req, res) => {
 });
 
 app.patch('/posts', (req, res) => {
-  const { uniqueKey, temptState } = req.body;
-  const timeLinePosts = editPost(uniqueKey, temptState);
+  const { uniqueKey, updatedContents } = req.body;
+  const timeLinePosts = editPost(uniqueKey, updatedContents);
   res.send({ timeLinePosts });
 });
 
@@ -86,6 +87,12 @@ app.post('/childcomments', (req, res) => {
   const postComments = addChildComment(uniqueKey, contents, currentUserID, currentUserName);
   res.send({ postComments });
 })
+
+app.patch('/like', (req, res) => {
+  const { uniqueKey, currentUserID } = req.body;
+  const timeLinePosts = plusThumbCount(uniqueKey, currentUserID);
+  res.send({ timeLinePosts });
+});
 
 app.listen(port, () => {
   console.log(`Server is running at port ${port}...`);
