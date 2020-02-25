@@ -118,6 +118,19 @@ const plusCommentCount = (uniqueKey) => {
   return timeLinePosts;
 };
 
+// 댓글 좋아요
+const plusCommentThumbCount = (uniqueKey, currentUserID) => {
+  postComments.comment.forEach((comment) => {
+    comment.uniqueKey != uniqueKey
+    ? comment
+    : comment.commentThumbCount.includes(currentUserID)
+      ? comment.commentThumbCount = comment.commentThumbCount.filter((v) => v != currentUserID)
+      : comment.commentThumbCount = [...comment.commentThumbCount, currentUserID];
+  });
+
+  return postComments;
+};
+
 // 대댓글 추가
 const addChildComment = (uniqueKey, contents, currentUserID, currentUserName) => {
   postComments.comment.forEach((comment) => {
@@ -146,5 +159,6 @@ module.exports = {
   getComments,
   addComment,
   plusCommentCount,
+  plusCommentThumbCount,
   addChildComment,
 };

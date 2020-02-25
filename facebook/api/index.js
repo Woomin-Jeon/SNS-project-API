@@ -16,6 +16,7 @@ const {
   getComments,
   addComment,
   plusCommentCount,
+  plusCommentThumbCount,
   addChildComment,
 } = require('./timeline');
 
@@ -92,6 +93,12 @@ app.patch('/like', (req, res) => {
   const { uniqueKey, currentUserID } = req.body;
   const timeLinePosts = plusThumbCount(uniqueKey, currentUserID);
   res.send({ timeLinePosts });
+});
+
+app.patch('/commentlike', (req, res) => {
+  const { uniqueKey, currentUserID } = req.body;
+  const postComments = plusCommentThumbCount(uniqueKey, currentUserID);
+  res.send({ postComments });
 });
 
 app.listen(port, () => {
