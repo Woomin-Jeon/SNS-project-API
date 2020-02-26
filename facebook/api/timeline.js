@@ -82,24 +82,23 @@ const removePost = (specificPostUniqueKey) => {
 
 // 게시글 수정
 const editPost = (uniqueKey, updatedContents) => {
-  timeLinePosts.post.forEach((post) => {
-    post.uniqueKey != uniqueKey
-    ? post
-    : post.contents = updatedContents;
-  });
+  let index = timeLinePosts.post
+    .findIndex(post => post.uniqueKey === uniqueKey);
+  
+  timeLinePosts.post[index].contents = updatedContents;
 
   return timeLinePosts;
 }
 
 // 게시글 좋아요
 const plusThumbCount = (uniqueKey, currentUserID) => {
-  timeLinePosts.post.forEach((post) => {
-    post.uniqueKey != uniqueKey
-    ? post
-    : post.thumbCount.includes(currentUserID)
-      ? post.thumbCount = post.thumbCount.filter((v) => v != currentUserID)
-      : post.thumbCount = [...post.thumbCount, currentUserID];
-  });
+  let index = timeLinePosts.post
+    .findIndex(post => post.uniqueKey === uniqueKey);
+  
+  timeLinePosts.post[index].thumbCount.includes(currentUserID)
+  ? timeLinePosts.post[index].thumbCount =
+      timeLinePosts.post[index].thumbCount.filter(v => v != currentUserID)
+  : timeLinePosts.post[index].thumbCount = [...timeLinePosts.post[index].thumbCount, currentUserID]
 
   return timeLinePosts;
 };
@@ -117,11 +116,10 @@ const addScrap = (whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedP
     ...timeLinePosts.scrap,
   ];
 
-  timeLinePosts.post.forEach((post) => {
-    post.uniqueKey != uniqueKey
-    ? post
-    : post.sharingCount = post.sharingCount + 1;
-  });
+  let index = timeLinePosts.post
+    .findIndex(post => post.uniqueKey === uniqueKey);
+
+  timeLinePosts.post[index].sharingCount += 1;
 
   return timeLinePosts;
 }
@@ -150,42 +148,41 @@ const addComment = (uniqueKey, currentUserID, currentUserName, commentContents) 
 
 // 댓글 추가시 댓글 개수 +1
 const plusCommentCount = (uniqueKey) => {
-  timeLinePosts.post.forEach((post) => {
-    post.uniqueKey != uniqueKey
-    ? post
-    : post.commentCount = post.commentCount + 1;
-  });
+  let index = timeLinePosts.post
+    .findIndex(post => post.uniqueKey === uniqueKey);
+
+  timeLinePosts.post[index].commentCount += 1;
   
   return timeLinePosts;
 };
 
 // 댓글 좋아요
 const plusCommentThumbCount = (uniqueKey, currentUserID) => {
-  postComments.comment.forEach((comment) => {
-    comment.uniqueKey != uniqueKey
-    ? comment
-    : comment.commentThumbCount.includes(currentUserID)
-      ? comment.commentThumbCount = comment.commentThumbCount.filter((v) => v != currentUserID)
-      : comment.commentThumbCount = [...comment.commentThumbCount, currentUserID];
-  });
+  let index = postComments.comment
+    .findIndex(comment => comment.uniqueKey === uniqueKey);
+  
+  postComments.comment[index].commentThumbCount.includes(currentUserID)
+  ? postComments.comment[index].commentThumbCount =
+      postComments.comment[index].commentThumbCount.filter(v => v != currentUserID)
+  : postComments.comment[index].commentThumbCount =
+      [...postComments.comment[index].commentThumbCount, currentUserID]
 
   return postComments;
 };
 
 // 대댓글 추가
 const addChildComment = (uniqueKey, contents, currentUserID, currentUserName) => {
-  postComments.comment.forEach((comment) => {
-    comment.uniqueKey != uniqueKey
-    ? comment
-    : comment.childComment = [
-      {
-        id: currentUserID,
-        name: currentUserName,
-        statement: contents,
-      },
-      ...comment.childComment,
-    ];
-  });
+  let index = postComments.comment
+    .findIndex(comment => comment.uniqueKey === uniqueKey);
+  
+  postComments.comment[index].childComment = [
+    {
+      id: currentUserID,
+      name: currentUserName,
+      statement: contents,
+    },
+    ...postComments.comment[index].childComment,
+  ];
 
   return postComments;
 };
