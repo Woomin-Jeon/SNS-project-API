@@ -16,7 +16,7 @@ const userStore = {
       id: 'q',
       pw: 'q',
       userName: '김대희',
-      friends: ['ㅁ'],
+      friends: ['ㅁ','w'],
     },
     {
       id: 'w',
