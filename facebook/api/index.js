@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 const cors = require('cors');
 
 const {
@@ -27,6 +28,11 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(session({
+  secret : 'Rs89I67YEA5cLngi0t6oyr8775a4KtD',
+  resave: true,
+  saveUninitialized: true
+}));
 
 app.get('/login', (req, res) => {
   const userStore = getUsers();
