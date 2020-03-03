@@ -7,8 +7,8 @@ const userStore = {
       friends: ['ㅁ'],
     },
     {
-      id: 'ㅁ',
-      pw: 'ㅁ',
+      id: 'd',
+      pw: 'd',
       userName: '김병찬',
       friends: ['a','q','w'],
     },

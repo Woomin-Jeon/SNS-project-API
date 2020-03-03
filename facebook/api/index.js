@@ -28,16 +28,39 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+/* 클라이언트: req (cookie는 req에 자동을 포함되어서 전송)
+   서버 : cookie 안에 sessionID가 있는지 확인
+   존재함?   -> 서버에 저장해놓은 sessionID 값과 인덱싱해서 해당 ID에 맞는 서비스 제공
+   존재안함? -> 서버가 sessionID 값을 생성하고 이를 클라이언트에게 발행
+
+만약에 로그인 버튼을 누르면, currentUser의
+값을 세션ID와 함께 서버 세션스토리지에 
+저장하고 로그인 화면을 띄울 때
+app.get('/login')에서 쿠키 안에 세션 ID가
+존재하는지 확인하고 /post로 보낼지 말지
+정한다.  
+*/
+
+// 클라이언트에 쿠키-세션 할당하기
 app.use(session({
-  secret : 'Rs89I67YEA5cLngi0t6oyr8775a4KtD',
+  secret : 'JEONWOOMINISGOOD',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: true,
+  cookie: {}, // 쿠키 할당
 }));
 
 app.get('/login', (req, res) => {
+  const sess = req.session;
+  sess.cookie = { ...sess.cookie, id: req.sessionID } // 쿠키에 세션ID 넣기
+  console.log(`----------------------------------------------`)
+  console.log('Session ID : ', req.sessionID);
+  console.log('Cookie : ', req.session.cookie);
   const userStore = getUsers();
   res.send({ userStore });
 });
+
+
 
 app.post('/login', (req, res) => {
   const { id, pw, userName } = req.body;
