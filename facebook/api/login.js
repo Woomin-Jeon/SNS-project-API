@@ -4,7 +4,7 @@ const userStore = {
       id: 'a',
       pw: 'a',
       userName: '전우민',
-      friends: ['ㅁ'],
+      friends: ['d'],
     },
     {
       id: 'd',
@@ -16,20 +16,39 @@ const userStore = {
       id: 'q',
       pw: 'q',
       userName: '김대희',
-      friends: ['ㅁ','w'],
+      friends: ['d','w'],
     },
     {
       id: 'w',
       pw: 'w',
       userName: '김민성',
-      friends: ['ㅁ'],
+      friends: ['d'],
     },
   ],
 };
 
+const getInformaionByID = (userID) => {
+  for (let i = 0; i < userStore.users.length; i++) {
+    if (userID === userStore.users[i].id) {
+      return [userStore.users[i].id, userStore.users[i].userName, userStore.users[i].friends];
+    }
+  }
+}
+
 const getUsers = () => {
   return userStore;
 };
+
+// 로그인
+const performLogin = (userID, userPW) => {
+  for (let i = 0; i < userStore.users.length; i += 1) {
+    if (userID === userStore.users[i].id && userPW === userStore.users[i].pw) {
+      return userStore.users[i];
+    }
+  }
+  
+  return 'fail';
+}
 
 // 회원가입
 const addUser = (inputID, inputPW, inputName) => {
@@ -73,4 +92,6 @@ module.exports = {
   addUser,
   addFriend,
   removeFriend,
+  performLogin,
+  getInformaionByID,
 };

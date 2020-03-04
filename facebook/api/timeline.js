@@ -22,7 +22,7 @@ const timeLinePosts = {
     },
     {
       uniqueKey: 102,
-      id: 'ㅁ',
+      id: 'd',
       name: '김병찬',
       contents: '아니 오늘 날씨 진짜 너무 추운거 아님?',
       thumbCount: [],
