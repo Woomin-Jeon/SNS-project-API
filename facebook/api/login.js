@@ -27,6 +27,7 @@ const userStore = {
   ],
 };
 
+// ID를 이용하여 다른 정보 얻기
 const getInformaionByID = (userID) => {
   for (let i = 0; i < userStore.users.length; i++) {
     if (userID === userStore.users[i].id) {
@@ -35,6 +36,7 @@ const getInformaionByID = (userID) => {
   }
 }
 
+// 유저 목록 GET
 const getUsers = () => {
   return userStore;
 };

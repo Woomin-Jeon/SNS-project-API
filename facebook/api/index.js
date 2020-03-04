@@ -35,24 +35,21 @@ app.use(session({
   secret : 'JEONWOOMINISGOOD',
   resave: true,
   saveUninitialized: false,
-  cookie: {}, // 쿠키 할당
+  cookie: {},
 }));
 
-app.post('/session', (req, res) => {
-  const { userID, userPW } = req.body;
-  const state = 0;
-  const redirect = 0;
-  
-  if (userID == 'session' && userPW == 'destroy') {
-    req.session.destroy();
-  }
-  
+// 로그인화면에서 이미 세션이 존재하는가
+app.get('/session', (req, res) => {
   if (req.session.user) {
     const sending = getInformaionByID(req.session.user);
     res.send({ sending });
-    return;
   }
+})
 
+// 로그인 시 세션 저장
+app.post('/session', (req, res) => {
+  const { userID, userPW } = req.body;
+  const state = 'fail';
 
   const userInformation = performLogin(userID, userPW);
   
@@ -62,6 +59,12 @@ app.post('/session', (req, res) => {
     req.session.user = userID;
     res.send({ userInformation });
   }
+});
+
+// 세션 제거
+app.patch('/session', (req, res) => {
+  req.session.destroy();
+  res.send();
 });
 
 app.get('/login', (req, res) => {
