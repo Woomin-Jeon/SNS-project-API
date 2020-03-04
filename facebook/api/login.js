@@ -28,12 +28,9 @@ const userStore = {
 };
 
 // ID를 이용하여 다른 정보 얻기
-const getInformaionByID = (userID) => {
-  for (let i = 0; i < userStore.users.length; i++) {
-    if (userID === userStore.users[i].id) {
-      return [userStore.users[i].id, userStore.users[i].userName, userStore.users[i].friends];
-    }
-  }
+const getUserByID = (userID) => {
+  const user = userStore.users.find(({id}) => id === userID);
+  return user;
 }
 
 // 유저 목록 GET
@@ -42,14 +39,14 @@ const getUsers = () => {
 };
 
 // 로그인
-const performLogin = (userID, userPW) => {
-  for (let i = 0; i < userStore.users.length; i += 1) {
-    if (userID === userStore.users[i].id && userPW === userStore.users[i].pw) {
-      return userStore.users[i];
-    }
-  }
+const login = (userID, userPW) => {
+  const user = getUserByID(userID);
   
-  return 'fail';
+  if (!user) {
+    return 400;
+  }
+
+  return user;
 }
 
 // 회원가입
@@ -94,6 +91,6 @@ module.exports = {
   addUser,
   addFriend,
   removeFriend,
-  performLogin,
-  getInformaionByID,
+  login,
+  getUserByID,
 };

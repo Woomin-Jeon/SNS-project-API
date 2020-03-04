@@ -7,8 +7,8 @@ const {
   addUser,
   addFriend,
   removeFriend,
-  performLogin,
-  getInformaionByID,
+  login,
+  getUserByID,
 } = require('./login');
 
 const {
@@ -40,24 +40,26 @@ app.use(session({
 
 // 로그인화면에서 이미 세션이 존재하는가
 app.get('/session', (req, res) => {
-  if (req.session.user) {
-    const sending = getInformaionByID(req.session.user);
-    res.send({ sending });
+  if (!req.session.userID) {
+    res.status(400);
+    return;
   }
-})
+  
+  const user = getUserByID(req.session.userID);
+  res.send({ user });
+});
 
 // 로그인 시 세션 저장
 app.post('/session', (req, res) => {
   const { userID, userPW } = req.body;
-  const state = 'fail';
 
-  const userInformation = performLogin(userID, userPW);
-  
-  if (userInformation === 'fail') {
-    res.send({ state });
+  const user = login(userID, userPW);
+
+  if (user === 400) {
+    res.send({ status: 400 });
   } else {
-    req.session.user = userID;
-    res.send({ userInformation });
+    req.session.userID = userID;
+    res.send({ user });
   }
 });
 
