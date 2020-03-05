@@ -6,7 +6,7 @@ const timeLinePosts = {
       name: '전우민',
       contents: '오늘은 날씨가 정말 맑아서 기분이 상쾌하다',
       thumbCount: [],
-      sharingCount: 0, 
+      sharingCount: 0,
       commentCount: 0,
       isEditButtonClicked: false,
     },
@@ -16,7 +16,7 @@ const timeLinePosts = {
       name: '김대희',
       contents: '아 오늘 아침을 너무 조금 먹었더니 배고파',
       thumbCount: [],
-      sharingCount: 0, 
+      sharingCount: 0,
       commentCount: 0,
       isEditButtonClicked: false,
     },
@@ -26,7 +26,7 @@ const timeLinePosts = {
       name: '김병찬',
       contents: '아니 오늘 날씨 진짜 너무 추운거 아님?',
       thumbCount: [],
-      sharingCount: 0, 
+      sharingCount: 0,
       commentCount: 0,
       isEditButtonClicked: false,
     },
@@ -36,13 +36,13 @@ const timeLinePosts = {
       name: '김민성',
       contents: '벌써 20시 18분 이구나',
       thumbCount: [],
-      sharingCount: 0, 
+      sharingCount: 0,
       commentCount: 0,
       isEditButtonClicked: false,
     },
   ],
   scrap: [],
-}
+};
 
 const postComments = {
   comment: [],
@@ -75,8 +75,8 @@ const addPost = (inputID, inputName, inputContents) => {
 // 게시글 삭제
 const removePost = (specificPostUniqueKey) => {
   timeLinePosts.post = timeLinePosts.post.filter((post) =>
-    post.uniqueKey != specificPostUniqueKey);
-  
+    post.uniqueKey !== specificPostUniqueKey);
+
   return timeLinePosts;
 };
 
@@ -84,21 +84,21 @@ const removePost = (specificPostUniqueKey) => {
 const editPost = (uniqueKey, updatedContents) => {
   let index = timeLinePosts.post
     .findIndex(post => post.uniqueKey === uniqueKey);
-  
+
   timeLinePosts.post[index].contents = updatedContents;
 
   return timeLinePosts;
-}
+};
 
 // 게시글 좋아요
 const plusThumbCount = (uniqueKey, currentUserID) => {
   let index = timeLinePosts.post
     .findIndex(post => post.uniqueKey === uniqueKey);
-  
+
   timeLinePosts.post[index].thumbCount.includes(currentUserID)
   ? timeLinePosts.post[index].thumbCount =
-      timeLinePosts.post[index].thumbCount.filter(v => v != currentUserID)
-  : timeLinePosts.post[index].thumbCount = [...timeLinePosts.post[index].thumbCount, currentUserID]
+      timeLinePosts.post[index].thumbCount.filter(v => v !== currentUserID)
+  : timeLinePosts.post[index].thumbCount = [...timeLinePosts.post[index].thumbCount, currentUserID];
 
   return timeLinePosts;
 };
@@ -122,7 +122,7 @@ const addScrap = (whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedP
   timeLinePosts.post[index].sharingCount += 1;
 
   return timeLinePosts;
-}
+};
 
 // GET Comments
 const getComments = () => postComments;
@@ -152,7 +152,7 @@ const plusCommentCount = (uniqueKey) => {
     .findIndex(post => post.uniqueKey === uniqueKey);
 
   timeLinePosts.post[index].commentCount += 1;
-  
+
   return timeLinePosts;
 };
 
@@ -160,12 +160,12 @@ const plusCommentCount = (uniqueKey) => {
 const plusCommentThumbCount = (uniqueKey, currentUserID) => {
   let index = postComments.comment
     .findIndex(comment => comment.uniqueKey === uniqueKey);
-  
+
   postComments.comment[index].commentThumbCount.includes(currentUserID)
   ? postComments.comment[index].commentThumbCount =
-      postComments.comment[index].commentThumbCount.filter(v => v != currentUserID)
+      postComments.comment[index].commentThumbCount.filter(v => v !== currentUserID)
   : postComments.comment[index].commentThumbCount =
-      [...postComments.comment[index].commentThumbCount, currentUserID]
+      [...postComments.comment[index].commentThumbCount, currentUserID];
 
   return postComments;
 };
@@ -174,7 +174,7 @@ const plusCommentThumbCount = (uniqueKey, currentUserID) => {
 const addChildComment = (uniqueKey, contents, currentUserID, currentUserName) => {
   let index = postComments.comment
     .findIndex(comment => comment.uniqueKey === uniqueKey);
-  
+
   postComments.comment[index].childComment = [
     {
       id: currentUserID,

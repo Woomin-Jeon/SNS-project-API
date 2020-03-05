@@ -29,9 +29,8 @@ const userStore = {
 
 // ID를 이용하여 다른 정보 얻기
 const getUserByID = (userID) => {
-  const user = userStore.users.find(({id}) => id === userID);
-  return user;
-}
+  return userStore.users.find(({id}) => id === userID);
+};
 
 // 유저 목록 GET
 const getUsers = () => {
@@ -39,15 +38,7 @@ const getUsers = () => {
 };
 
 // 로그인
-const login = (userID, userPW) => {
-  const user = getUserByID(userID);
-  
-  if (!user) {
-    return 400;
-  }
-
-  return user;
-}
+const login = (userID, userPW) => getUserByID(userID);
 
 // 회원가입
 const addUser = (inputID, inputPW, inputName) => {
@@ -59,17 +50,17 @@ const addUser = (inputID, inputPW, inputName) => {
       userName: inputName,
       friends: [],
     },
-  ]
+  ];
 
   return userStore;
-}
+};
 
 // 친구 추가
 const addFriend = (currentUserID ,friendID) => {
   let index = userStore.users
     .findIndex(user => user.id === currentUserID);
 
-  userStore.users[index].friends = 
+  userStore.users[index].friends =
     [...userStore.users[index].friends, friendID];
 
   return userStore;
@@ -81,7 +72,7 @@ const removeFriend = (currentUserID, friendID) => {
     .findIndex(user => user.id === currentUserID);
 
   userStore.users[index].friends =
-    userStore.users[index].friends.filter((v) => v != friendID);
+    userStore.users[index].friends.filter((v) => v !== friendID);
 
   return userStore;
 };
