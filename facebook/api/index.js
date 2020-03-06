@@ -26,6 +26,8 @@ const {
   addChildComment,
 } = require('./timeline');
 
+let uniqueKeyCount = 0;
+
 const app = express();
 const port = 3000;
 
@@ -41,6 +43,9 @@ mongoose.connect('mongodb://localhost:27017/facebook', {
 });
 
 const User = require('./models/user');
+const Post = require('./models/post');
+const Comment = require('./models/comment');
+const Scrap = require('./models/scrap');
 
 app.use(express.json());
 app.use(cors());
@@ -128,10 +133,27 @@ app.get('/posts', (req, res) => {
 });
 
 // 게시글 등록
-app.post('/posts', (req, res) => {
+app.post('/posts', async (req, res) => {
   const { id, name, contents } = req.body;
-  const timeLinePosts = addPost(id, name, contents);
-  res.send({ timeLinePosts });
+
+  try {
+    await Post.create({
+      uniqueKey: uniqueKeyCount++,
+      id,
+      name,
+      contents,
+      thumbCount: [],
+      sharingCount: 0,
+      commentCount: 0,
+      isEditButtonClicked: false,
+    });
+    res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Internal error' });
+  }
+  // const timeLinePosts = addPost(id, name, contents);
+  // res.send({ timeLinePosts });
 });
 
 // 게시글 삭제
@@ -149,23 +171,54 @@ app.patch('/posts', (req, res) => {
 });
 
 // 게시글 스크랩
-app.post('/scraps', (req, res) => {
+app.post('/scraps', async (req, res) => {
   const { whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey } = req.body;
-  const timeLinePosts = addScrap(whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey);
-  res.send({ timeLinePosts });
+
+  try {
+    await Scrap.create({
+      uniqueKey: uniqueKeyCount++,
+      id: whoScrapedByID,
+      whoDid: whoScrapedByName,
+      name: whoWritePostByName,
+      contents: ScrapedPostContents,
+    });
+    res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Internal error' });
+  }
+  // const timeLinePosts = addScrap(whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey);
+  // res.send({ timeLinePosts });
 });
 
 // GET 댓글 목록
 app.get('/comments', (req, res) => {
   const postComments = getComments();
   res.send({ postComments });
-})
+});
 
 // 댓글 추가
-app.post('/comments', (req, res) => {
+app.post('/comments', async (req, res) => {
   const { uniqueKey, currentUserID, currentUserName, commentContents } = req.body;
-  const postComments = addComment(uniqueKey, currentUserID, currentUserName, commentContents);
-  res.send({ postComments });
+
+  try {
+    await Comment.create({
+      uniqueKey: uniqueKeyCount++,
+      id: uniqueKey,
+      writerID: currentUserID,
+      writer: currentUserName,
+      statement: commentContents,
+      childComment: [],
+      isChildCommentFunctionOn: false,
+      commentThumbCount: [],
+    });
+    res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({message: 'Internal error'});
+  }
+  // const postComments = addComment(uniqueKey, currentUserID, currentUserName, commentContents);
+  // res.send({ postComments });
 });
 
 // 댓글 개수 +1
@@ -180,7 +233,7 @@ app.post('/childcomments', (req, res) => {
   const { uniqueKey, contents, currentUserID, currentUserName } = req.body;
   const postComments = addChildComment(uniqueKey, contents, currentUserID, currentUserName);
   res.send({ postComments });
-})
+});
 
 // 댓글 좋아요 +1
 app.patch('/like', (req, res) => {
