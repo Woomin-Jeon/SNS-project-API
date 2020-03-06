@@ -57,28 +57,30 @@ app.use(session({
   cookie: {},
 }));
 
+
 // 로그인화면에서 이미 세션이 존재하는가
-app.get('/session', (req, res) => {
+app.get('/session', async (req, res) => {
   if (!req.session.userID) {
     res.status(400).send({ message: 'Session not exist' });
     return;
   }
 
-  const user = getUserByID(req.session.userID);
+  const user = await User.findById(req.session.userID);
   res.send({ user });
 });
 
 // 로그인 시 세션 저장
-app.post('/session', (req, res) => {
+app.post('/session', async (req, res) => {
   const { userID, userPW } = req.body;
 
-  const user = login(userID, userPW);
+  const user = await User.findOne({ id: userID, pw: userPW });
+
   if (!user) {
-    res.send({ status: 400 });
+    res.send({ status: 400, user: null });
     return;
   }
 
-  req.session.userID = user.id;
+  req.session.userID = user._id;
   res.send({ user });
 });
 
@@ -89,9 +91,12 @@ app.patch('/session', (req, res) => {
 });
 
 // GET 유저 목록
-app.get('/login', (req, res) => {
-  const userStore = getUsers();
-  res.send({ userStore });
+app.get('/login', async (req, res) => {
+  // const userStore = getUsers();
+  // console.log(userStore);
+  const users = await User.find();
+
+  res.send({ userStore: users });
 });
 
 // 회원가입
@@ -127,9 +132,9 @@ app.patch('/friends', (req, res) => {
 });
 
 // GET 게시글 목록
-app.get('/posts', (req, res) => {
-  const timeLinePosts = getPosts();
-  res.send({ timeLinePosts });
+app.get('/posts', async (req, res) => {
+  const posts = await Post.find();
+  res.send({ timeLinePosts: posts });
 });
 
 // 게시글 등록
@@ -147,27 +152,34 @@ app.post('/posts', async (req, res) => {
       commentCount: 0,
       isEditButtonClicked: false,
     });
-    res.status(200).send();
+    const posts = await Post.find();
+    res.status(200).send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: 'Internal error' });
   }
-  // const timeLinePosts = addPost(id, name, contents);
-  // res.send({ timeLinePosts });
 });
 
 // 게시글 삭제
-app.delete('/posts/:uniquekey', (req, res) => {
+app.delete('/posts/:uniquekey', async (req, res) => {
   const specificPostUniqueKey = req.params.uniquekey;
-  const timeLinePosts = removePost(specificPostUniqueKey);
-  res.send({ timeLinePosts });
+  const post = await Post.deleteOne({ uniqueKey: specificPostUniqueKey});
+
+  const posts = await Post.find();
+  res.send({ timeLinePosts: posts });
 });
 
 // 게시글 수정
-app.patch('/posts', (req, res) => {
+app.patch('/posts', async (req, res) => {
   const { uniqueKey, updatedContents } = req.body;
-  const timeLinePosts = editPost(uniqueKey, updatedContents);
-  res.send({ timeLinePosts });
+
+  const timeLinePosts = await Post.updateOne({
+    uniqueKey: uniqueKey,
+    $set : { contents: updatedContents },
+  });
+
+  const posts = await Post.find();
+  res.send({ timeLinePosts: posts });
 });
 
 // 게시글 스크랩
@@ -192,9 +204,9 @@ app.post('/scraps', async (req, res) => {
 });
 
 // GET 댓글 목록
-app.get('/comments', (req, res) => {
-  const postComments = getComments();
-  res.send({ postComments });
+app.get('/comments', async (req, res) => {
+  const comments = await Comment.find();
+  res.send({ postComments: comments });
 });
 
 // 댓글 추가
