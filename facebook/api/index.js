@@ -3,29 +3,6 @@ const session = require('express-session');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-const {
-  getUsers,
-  addUser,
-  addFriend,
-  removeFriend,
-  login,
-  getUserByID,
-} = require('./login');
-
-const {
-  getPosts,
-  addPost,
-  removePost,
-  editPost,
-  plusThumbCount,
-  addScrap,
-  getComments,
-  addComment,
-  plusCommentCount,
-  plusCommentThumbCount,
-  addChildComment,
-} = require('./timeline');
-
 const app = express();
 const port = 3000;
 
@@ -129,17 +106,39 @@ app.post('/login', async (req, res) => {
 });
 
 // 친구 추가
-app.post('/friends', (req, res) => {
+app.post('/friends', async (req, res) => {
   const { currentUserID, friendID } = req.body;
-  const userStore = addFriend(currentUserID, friendID);
-  res.send({ userStore });
+
+  try {
+    await User.updateOne(
+      { id: currentUserID },
+      { $addToSet: { friends: friendID } }
+    );
+
+    const users = await User.find();
+    res.send({ userStore: users });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({ message: 'Server error' });
+  }
 });
 
 // 친구 해제
-app.patch('/friends', (req, res) => {
+app.patch('/friends', async (req, res) => {
   const { currentUserID, friendID } = req.body;
-  const userStore = removeFriend(currentUserID, friendID);
-  res.send({ userStore });
+
+  try {
+    await User.updateOne(
+      { id: currentUserID },
+      { $pull : { friends: friendID } }
+    );
+
+    const users = await User.find();
+    res.send({ userStore: users });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({ message: 'Server error' });
+  }
 });
 
 // GET 게시글 목록
