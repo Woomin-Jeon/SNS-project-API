@@ -233,7 +233,8 @@ app.post('/scraps', async (req, res) => {
       name: whoWritePostByName,
       contents: ScrapedPostContents,
     });
-    res.status(200).send();
+    const scraps = await Scrap.find();
+    res.status(200).send({ timeLinePosts: scraps});
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: 'Server error' });
