@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const commentSchema = new Schema({
   uniqueKey: Number,
-  id: String, // 어떤 게시글에 달린 댓글인지 확인하기 위한 것
+  id: Number, // 어떤 게시글에 달린 댓글인지 확인하기 위한 것
   writerID: String, // 댓글 쓰는 사람의 ID // owner
   writer: String, // 댓글 쓰는 사람의 Name
   statement: String, // 댓글의 내용

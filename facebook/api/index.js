@@ -26,8 +26,6 @@ const {
   addChildComment,
 } = require('./timeline');
 
-let uniqueKeyCount = 0;
-
 const app = express();
 const port = 3000;
 
@@ -46,6 +44,7 @@ const User = require('./models/user');
 const Post = require('./models/post');
 const Comment = require('./models/comment');
 const Scrap = require('./models/scrap');
+const Key = require('./models/key');
 
 app.use(express.json());
 app.use(cors());
@@ -65,23 +64,33 @@ app.get('/session', async (req, res) => {
     return;
   }
 
-  const user = await User.findById(req.session.userID);
-  res.send({ user });
+  try {
+    const user = await User.findById(req.session.userID);
+    res.send({ user });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({message: 'Server error'});
+  }
 });
 
 // 로그인 시 세션 저장
 app.post('/session', async (req, res) => {
   const { userID, userPW } = req.body;
 
-  const user = await User.findOne({ id: userID, pw: userPW });
+  try {
+    const user = await User.findOne({ id: userID, pw: userPW });
 
-  if (!user) {
-    res.send({ status: 400, user: null });
-    return;
+    if (!user) {
+      res.send({ status: 400, user: null });
+      return;
+    }
+
+    req.session.userID = user._id;
+    res.send({ user });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({message: 'Server error'});
   }
-
-  req.session.userID = user._id;
-  res.send({ user });
 });
 
 // 세션 제거
@@ -92,11 +101,13 @@ app.patch('/session', (req, res) => {
 
 // GET 유저 목록
 app.get('/login', async (req, res) => {
-  // const userStore = getUsers();
-  // console.log(userStore);
-  const users = await User.find();
-
-  res.send({ userStore: users });
+  try {
+    const users = await User.find();
+    res.send({ userStore: users });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({message: 'Server error'});
+  }
 });
 
 // 회원가입
@@ -113,7 +124,7 @@ app.post('/login', async (req, res) => {
     res.status(200).send();
   } catch (err){
     console.error(err);
-    res.status(500).send({message: 'Internal error'});
+    res.status(500).send({message: 'Server error'});
   }
 });
 
@@ -133,8 +144,13 @@ app.patch('/friends', (req, res) => {
 
 // GET 게시글 목록
 app.get('/posts', async (req, res) => {
-  const posts = await Post.find();
-  res.send({ timeLinePosts: posts });
+  try {
+    const posts = await Post.find();
+    res.send({ timeLinePosts: posts });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({ message: 'Server error' });
+  }
 });
 
 // 게시글 등록
@@ -142,8 +158,15 @@ app.post('/posts', async (req, res) => {
   const { id, name, contents } = req.body;
 
   try {
+    await Key.updateOne(
+      { id: 'key' },
+      { $inc: { key: +1 } },
+    );
+
+    const getKey = await Key.findOne({ id: 'key' });
+
     await Post.create({
-      uniqueKey: uniqueKeyCount++,
+      uniqueKey: getKey.key,
       id,
       name,
       contents,
@@ -156,30 +179,40 @@ app.post('/posts', async (req, res) => {
     res.status(200).send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);
-    res.status(500).send({ message: 'Internal error' });
+    res.status(500).send({ message: 'Server error' });
   }
 });
 
 // 게시글 삭제
 app.delete('/posts/:uniquekey', async (req, res) => {
   const specificPostUniqueKey = req.params.uniquekey;
-  const post = await Post.deleteOne({ uniqueKey: specificPostUniqueKey});
 
-  const posts = await Post.find();
-  res.send({ timeLinePosts: posts });
+  try {
+    const post = await Post.deleteOne({ uniqueKey: specificPostUniqueKey});
+    const posts = await Post.find();
+    res.send({ timeLinePosts: posts });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({ message: 'Server error' });
+  }
 });
 
 // 게시글 수정
 app.patch('/posts', async (req, res) => {
   const { uniqueKey, updatedContents } = req.body;
 
-  const timeLinePosts = await Post.updateOne({
-    uniqueKey: uniqueKey,
-    $set : { contents: updatedContents },
-  });
+  try {
+    await Post.updateOne(
+      { uniqueKey: uniqueKey },
+      { $set : { contents: updatedContents } },
+    );
 
-  const posts = await Post.find();
-  res.send({ timeLinePosts: posts });
+    const posts = await Post.find();
+    res.send({ timeLinePosts: posts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Server error' });
+  }
 });
 
 // 게시글 스크랩
@@ -187,8 +220,15 @@ app.post('/scraps', async (req, res) => {
   const { whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey } = req.body;
 
   try {
+    await Key.updateOne(
+      { id: 'key' },
+      { $inc: { key: +1 } },
+    );
+
+    const getKey = await Key.findOne({ id: 'key' });
+
     await Scrap.create({
-      uniqueKey: uniqueKeyCount++,
+      uniqueKey: getKey.key,
       id: whoScrapedByID,
       whoDid: whoScrapedByName,
       name: whoWritePostByName,
@@ -197,10 +237,8 @@ app.post('/scraps', async (req, res) => {
     res.status(200).send();
   } catch (err) {
     console.error(err);
-    res.status(500).send({ message: 'Internal error' });
+    res.status(500).send({ message: 'Server error' });
   }
-  // const timeLinePosts = addScrap(whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey);
-  // res.send({ timeLinePosts });
 });
 
 // GET 댓글 목록
@@ -214,8 +252,15 @@ app.post('/comments', async (req, res) => {
   const { uniqueKey, currentUserID, currentUserName, commentContents } = req.body;
 
   try {
+    await Key.updateOne(
+      { id: 'key' },
+      { $inc: { key: +1 } },
+    );
+
+    const getKey = await Key.findOne({ id: 'key' });
+
     await Comment.create({
-      uniqueKey: uniqueKeyCount++,
+      uniqueKey: getKey.key,
       id: uniqueKey,
       writerID: currentUserID,
       writer: currentUserName,
@@ -224,41 +269,87 @@ app.post('/comments', async (req, res) => {
       isChildCommentFunctionOn: false,
       commentThumbCount: [],
     });
-    res.status(200).send();
+
+    const comments = await Comment.find();
+    res.status(200).send({ postComments: comments});
   } catch (err) {
     console.error(err);
-    res.status(500).send({message: 'Internal error'});
+    res.status(500).send({message: 'Server error'});
   }
-  // const postComments = addComment(uniqueKey, currentUserID, currentUserName, commentContents);
-  // res.send({ postComments });
 });
 
 // 댓글 개수 +1
-app.patch('/comments', (req, res) => {
+app.patch('/comments', async (req, res) => {
   const { uniqueKey } = req.body;
-  const timeLinePosts = plusCommentCount(uniqueKey);
-  res.send({ timeLinePosts });
+  await Post.updateOne(
+    { uniqueKey: uniqueKey },
+    { $inc: { commentCount: +1 } },
+  );
+
+  const posts = await Post.find();
+  res.send({ timeLinePosts: posts });
 });
 
 // 대댓글 추가
-app.post('/childcomments', (req, res) => {
+app.post('/childcomments', async (req, res) => {
   const { uniqueKey, contents, currentUserID, currentUserName } = req.body;
-  const postComments = addChildComment(uniqueKey, contents, currentUserID, currentUserName);
-  res.send({ postComments });
+
+  try {
+    await Comment.updateOne(
+      { uniqueKey: uniqueKey },
+      { $push: {
+          childComment: {
+            id: currentUserID,
+            name: currentUserName,
+            statement: contents
+          }
+        }
+      });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({message: 'Server error'});
+  }
+
+  const comments = await Comment.find();
+  res.send({ postComments: comments });
+});
+
+// 게시글 좋아요 +1
+app.patch('/like', async (req, res) => {
+  const { uniqueKey, currentUserID } = req.body;
+
+  try {
+    await Post.updateOne(
+      { uniqueKey: uniqueKey },
+      { $addToSet: { thumbCount: currentUserID } }
+    );
+
+    const posts = await Post.find();
+    res.send({ timeLinePosts: posts });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({message: 'Server error'});
+  }
 });
 
 // 댓글 좋아요 +1
-app.patch('/like', (req, res) => {
+app.patch('/commentlike', async (req, res) => {
   const { uniqueKey, currentUserID } = req.body;
-  const timeLinePosts = plusThumbCount(uniqueKey, currentUserID);
-  res.send({ timeLinePosts });
-});
 
-// 대댓글 좋아요 +1
-app.patch('/commentlike', (req, res) => {
-  const { uniqueKey, currentUserID } = req.body;
-  const postComments = plusCommentThumbCount(uniqueKey, currentUserID);
-  res.send({ postComments });
+  try {
+    await Comment.updateOne(
+      { uniqueKey: uniqueKey },
+      { $addToSet: { commentThumbCount: currentUserID } }
+    );
+
+    const comments = await Comment.find();
+    res.send({ postComments: comments });
+  } catch(err) {
+    console.error(err);
+    res.status(500).send({message: 'Server error'});
+  }
+
+
 });
 
 app.listen(port, () => {
