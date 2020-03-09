@@ -5,6 +5,9 @@ const userSchema = new Schema({
   id: String,
   pw: String,
   userName: String,
+  birth: String,
+  location: String,
+  email: String,
   friends: Array,
   profile: String,
 });

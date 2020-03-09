@@ -34,18 +34,6 @@ app.use(session({
   cookie: {},
 }));
 
-// // 게시글 사진 업로드
-// app.patch('/postimage', async (req, res) => {
-//   const { userId, filePath } = req.body;
-//
-//   await Post.updateOne(
-//     { uniqueKey: userId },
-//     { $set: { image: filePath } }
-//   );
-//
-//   res.status(200).send();
-// });
-
 // 프로필 사진 업로드
 app.patch('/profile', async (req, res) => {
   const { userId, filePath } = req.body;
@@ -137,13 +125,16 @@ app.get('/login', async (req, res) => {
 
 // 회원가입
 app.post('/login', async (req, res) => {
-  const { id, pw, userName } = req.body;
+  const { id, pw, userName, birth, location, email } = req.body;
 
   try {
     await User.create({
       id,
       pw,
       userName,
+      birth,
+      location,
+      email,
       friends: [],
       profile: '',
     });
