@@ -1,5 +1,6 @@
 const express = require('express');
 const session = require('express-session');
+const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
@@ -25,7 +26,7 @@ const Key = require('./models/key');
 
 app.use(express.json());
 app.use(cors());
-
+app.use(fileUpload());
 app.use(session({
   secret : 'JEONWOOMINISGOOD',
   resave: true,
@@ -33,6 +34,23 @@ app.use(session({
   cookie: {},
 }));
 
+// 파일 업로드
+app.post('/upload', (req, res) => {
+  if (req.files === null) {
+    return res.status(400).json({ msg: 'No file uploaded' });
+  }
+
+  const file = req.files.file;
+
+  file.mv(`${__dirname}/../FrontEnd/img/${file.name}`, err => {
+    if (err) {
+      console.error(err);
+      return res.status(400).send(err);
+    }
+
+    res.json({ fileName: file.name, filePath: `/img/${file.name}` });
+  });
+});
 
 // 로그인화면에서 이미 세션이 존재하는가
 app.get('/session', async (req, res) => {
