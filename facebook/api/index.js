@@ -49,24 +49,27 @@ app.patch('/profile', async (req, res) => {
 // 파일 업로드
 app.post('/upload', async (req, res) => {
   if (req.files === null) {
-    return res.status(400).json({ msg: 'No file uploaded' });
+    res.status(400).json({ message: 'No file uploaded' });
+    return;
   }
 
-  const file = req.files.file;
   await Key.updateOne(
     { id: 'key' },
     { $inc: { key: +1 } },
   );
+  const key = await Key.findOne({ id: 'key' });
 
-  const getKey = await Key.findOne({ id: 'key' });
-
-  file.mv(`${__dirname}/../FrontEnd/img/${getKey.id}${file.name}`, err => {
+  const file = req.files.file;
+  const filePath = `${__dirname}/../FrontEnd/img/${key.id}${file.name}`;
+  // util.promisify() 사용해서 콜백 제거
+  file.mv(filePath, err => {
     if (err) {
       console.error(err);
-      return res.status(400).send(err);
+      res.status(400).send(err);
+      return;
     }
 
-    res.json({ fileName: file.name, filePath: `/img/${getKey.id}${file.name}` });
+    res.json({ fileName: file.name, filePath: `/img/${key.id}${file.name}` });
   });
 });
 
@@ -82,7 +85,7 @@ app.get('/session', async (req, res) => {
     res.send({ user });
   } catch(err) {
     console.error(err);
-    res.status(500).send({message: 'Server error'});
+    res.status(500).send({ message: 'Server error' });
   }
 });
 
@@ -102,7 +105,7 @@ app.post('/session', async (req, res) => {
     res.send({ user });
   } catch(err) {
     console.error(err);
-    res.status(500).send({message: 'Server error'});
+    res.status(500).send({ message: 'Server error' });
   }
 });
 
@@ -119,7 +122,7 @@ app.get('/login', async (req, res) => {
     res.send({ userStore: users });
   } catch(err) {
     console.error(err);
-    res.status(500).send({message: 'Server error'});
+    res.status(500).send({ message: 'Server error' });
   }
 });
 
@@ -141,7 +144,7 @@ app.post('/login', async (req, res) => {
     res.status(200).send();
   } catch (err){
     console.error(err);
-    res.status(500).send({message: 'Server error'});
+    res.status(500).send({ message: 'Server error' });
   }
 });
 
@@ -202,10 +205,10 @@ app.post('/posts', async (req, res) => {
       { $inc: { key: +1 } },
     );
 
-    const getKey = await Key.findOne({ id: 'key' });
+    const key = await Key.findOne({ id: 'key' });
 
     await Post.create({
-      uniqueKey: getKey.key,
+      uniqueKey: key.key,
       id,
       name,
       profile,
@@ -266,10 +269,10 @@ app.post('/scraps', async (req, res) => {
       { $inc: { key: +1 } },
     );
 
-    const getKey = await Key.findOne({ id: 'key' });
+    const key = await Key.findOne({ id: 'key' });
 
     await Scrap.create({
-      uniqueKey: getKey.key,
+      uniqueKey: key.key,
       id: whoScrapedByID,
       whoDid: whoScrapedByName,
       name: whoWritePostByName,
@@ -300,10 +303,10 @@ app.post('/comments', async (req, res) => {
       { $inc: { key: +1 } },
     );
 
-    const getKey = await Key.findOne({ id: 'key' });
+    const key = await Key.findOne({ id: 'key' });
 
     await Comment.create({
-      uniqueKey: getKey.key,
+      uniqueKey: key.key,
       id: uniqueKey,
       writerID: currentUserID,
       writer: currentUserName,
@@ -317,7 +320,7 @@ app.post('/comments', async (req, res) => {
     res.status(200).send({ postComments: comments});
   } catch (err) {
     console.error(err);
-    res.status(500).send({message: 'Server error'});
+    res.status(500).send({ message: 'Server error' });
   }
 });
 
@@ -350,7 +353,7 @@ app.post('/childcomments', async (req, res) => {
       });
   } catch(err) {
     console.error(err);
-    res.status(500).send({message: 'Server error'});
+    res.status(500).send({ message: 'Server error' });
   }
 
   const comments = await Comment.find();
@@ -371,7 +374,7 @@ app.patch('/like', async (req, res) => {
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
-    res.status(500).send({message: 'Server error'});
+    res.status(500).send({ message: 'Server error' });
   }
 });
 
@@ -389,7 +392,7 @@ app.patch('/commentlike', async (req, res) => {
     res.send({ postComments: comments });
   } catch(err) {
     console.error(err);
-    res.status(500).send({message: 'Server error'});
+    res.status(500).send({ message: 'Server error' });
   }
 
 
