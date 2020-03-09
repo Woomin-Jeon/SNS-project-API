@@ -5,6 +5,7 @@ const postSchema = new Schema({
   uniqueKey: Number,
   id: String, // 이 게시글을 누가 썼는지 식별
   name: String, // 이 게시글을 쓴 User의 이름
+  profile: String, // 게시글을 쓴 사람의 프로필사진
   contents: String, // 게시글의 내용
   thumbCount: Array, // 좋아요 개수. 배열의 길이를 반환하여 출력
   sharingCount: Number, // 공유 개수를 출력

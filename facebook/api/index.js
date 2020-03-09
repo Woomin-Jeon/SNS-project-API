@@ -34,21 +34,39 @@ app.use(session({
   cookie: {},
 }));
 
+// 프로필 사진 업로드
+app.patch('/profile', async (req, res) => {
+  const { userId, filePath } = req.body;
+
+  await User.updateOne(
+    { id: userId },
+    { $set: { profile: filePath } },
+  );
+
+  res.status(200).send();
+});
+
 // 파일 업로드
-app.post('/upload', (req, res) => {
+app.post('/upload', async (req, res) => {
   if (req.files === null) {
     return res.status(400).json({ msg: 'No file uploaded' });
   }
 
   const file = req.files.file;
+  await Key.updateOne(
+    { id: 'key' },
+    { $inc: { key: +1 } },
+  );
 
-  file.mv(`${__dirname}/../FrontEnd/img/${file.name}`, err => {
+  const getKey = await Key.findOne({ id: 'key' });
+
+  file.mv(`${__dirname}/../FrontEnd/img/${getKey.id}${file.name}`, err => {
     if (err) {
       console.error(err);
       return res.status(400).send(err);
     }
 
-    res.json({ fileName: file.name, filePath: `/img/${file.name}` });
+    res.json({ fileName: file.name, filePath: `/img/${getKey.id}${file.name}` });
   });
 });
 
@@ -115,6 +133,7 @@ app.post('/login', async (req, res) => {
       pw,
       userName,
       friends: [],
+      profile: '',
     });
     res.status(200).send();
   } catch (err){
@@ -172,7 +191,7 @@ app.get('/posts', async (req, res) => {
 
 // 게시글 등록
 app.post('/posts', async (req, res) => {
-  const { id, name, contents } = req.body;
+  const { id, name, contents, profile } = req.body;
 
   try {
     await Key.updateOne(
@@ -186,6 +205,7 @@ app.post('/posts', async (req, res) => {
       uniqueKey: getKey.key,
       id,
       name,
+      profile,
       contents,
       thumbCount: [],
       sharingCount: 0,
@@ -234,7 +254,7 @@ app.patch('/posts', async (req, res) => {
 
 // 게시글 스크랩
 app.post('/scraps', async (req, res) => {
-  const { whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey } = req.body;
+  const { whoScrapedByID, whoScrapedByName, whoWritePostByName, ScrapedPostContents, uniqueKey, profile } = req.body;
 
   try {
     await Key.updateOne(
@@ -249,6 +269,7 @@ app.post('/scraps', async (req, res) => {
       id: whoScrapedByID,
       whoDid: whoScrapedByName,
       name: whoWritePostByName,
+      profile,
       contents: ScrapedPostContents,
     });
     const scraps = await Scrap.find();
