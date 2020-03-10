@@ -128,7 +128,7 @@ app.get('/login', async (req, res) => {
 
 // 회원가입
 app.post('/login', async (req, res) => {
-  const { id, pw, userName, birth, location, email } = req.body;
+  const { id, pw, userName, birth, location, email, profile } = req.body;
 
   try {
     await User.create({
@@ -139,7 +139,7 @@ app.post('/login', async (req, res) => {
       location,
       email,
       friends: [],
-      profile: '',
+      profile,
     });
     res.status(200).send();
   } catch (err){
@@ -401,4 +401,3 @@ app.patch('/commentlike', async (req, res) => {
 app.listen(port, () => {
   console.log(`* Server is running at port ${port}...`);
 });
-
