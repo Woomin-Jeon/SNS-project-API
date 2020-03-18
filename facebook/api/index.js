@@ -42,14 +42,23 @@ app.use(session({
 // socket.io 채팅
 io.on('connection', (socket) => {
   socket.on('chat message', function(msg){
-    const { message, id } = msg;
+    const { message, userSocketID, userID } = msg;
 
-    socket.broadcast.emit('hello', message);
+    io.to(userSocketID).emit('hello', { userID, message });
   });
 
   socket.on('disconnect', function(){
-    console.log('!접속 종료');
   });
+});
+
+// GET socket.id
+app.get('/socket/:userid', (req, res) => {
+  const userID = req.params.userid;
+  const index = socketIdStore
+    .findIndex(({id}) =>id === userID);
+  const userSocketID = socketIdStore[index].socket;
+
+  res.send({ userSocketID });
 });
 
 // 프로필 사진 업로드
@@ -107,9 +116,11 @@ app.get('/session', async (req, res) => {
   }
 });
 
-// 로그인 시 세션 저장
+// 로그인 (세션 및 socket.id 저장)
 app.post('/session', async (req, res) => {
-  const { userID, userPW } = req.body;
+  const { userID, userPW, socketID } = req.body;
+
+  socketIdStore.push({ id: userID, socket: socketID });
 
   try {
     const user = await User.findOne({ id: userID, pw: userPW });
@@ -129,6 +140,11 @@ app.post('/session', async (req, res) => {
 
 // 세션 제거
 app.patch('/session', (req, res) => {
+  const { userID } = req.body;
+
+  const index = socketIdStore.findIndex(({id}) => id === userID);
+  socketIdStore.splice(index, 1);
+
   req.session.destroy();
   res.send();
 });
