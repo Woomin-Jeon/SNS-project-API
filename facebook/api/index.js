@@ -1,4 +1,6 @@
 const express = require('express');
+const server = require('http').createServer(express);
+const io = require('socket.io')(server);
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
@@ -6,6 +8,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 const port = 3000;
+const socketPort = 4000;
 
 const db = mongoose.connection;
 db.on('error', console.error);
@@ -24,15 +27,30 @@ const Comment = require('./models/comment');
 const Scrap = require('./models/scrap');
 const Key = require('./models/key');
 
+const socketIdStore = [];
+
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:8080', credentials: true }));
 app.use(fileUpload());
 app.use(session({
-  secret : 'JEONWOOMINISGOOD',
+  secret : 'JEONWOOMINFACEBOOKSESSION',
   resave: true,
   saveUninitialized: false,
   cookie: {},
 }));
+
+// socket.io 채팅
+io.on('connection', (socket) => {
+  socket.on('chat message', function(msg){
+    const { message, id } = msg;
+
+    socket.broadcast.emit('hello', message);
+  });
+
+  socket.on('disconnect', function(){
+    console.log('!접속 종료');
+  });
+});
 
 // 프로필 사진 업로드
 app.patch('/profile', async (req, res) => {
@@ -197,7 +215,7 @@ app.get('/posts', async (req, res) => {
 
 // 게시글 등록
 app.post('/posts', async (req, res) => {
-  const { id, name, contents, profile, imagePath } = req.body;
+  const { id, name, contents, profile, imagePath, time } = req.body;
 
   try {
     await Key.updateOne(
@@ -213,6 +231,7 @@ app.post('/posts', async (req, res) => {
       name,
       profile,
       contents,
+      time,
       image: imagePath,
       thumbCount: [],
       sharingCount: 0,
@@ -394,10 +413,12 @@ app.patch('/commentlike', async (req, res) => {
     console.error(err);
     res.status(500).send({ message: 'Server error' });
   }
-
-
 });
 
 app.listen(port, () => {
   console.log(`* Server is running at port ${port}...`);
+});
+
+server.listen(socketPort, () => {
+  console.log(`* socket.io is connected at port ${port}...`);
 });

@@ -7,6 +7,7 @@ const postSchema = new Schema({
   name: String, // 이 게시글을 쓴 User의 이름
   profile: String, // 게시글을 쓴 사람의 프로필사진 경로
   contents: String, // 게시글의 내용
+  time: Array, // 게시글이 작성된 시간
   image: String, // 게시글에 등록된 사진 경로
   thumbCount: Array, // 좋아요 개수. 배열의 길이를 반환하여 출력
   sharingCount: Number, // 공유 개수를 출력
