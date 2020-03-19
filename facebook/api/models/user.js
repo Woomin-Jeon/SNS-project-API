@@ -10,6 +10,7 @@ const userSchema = new Schema({
   email: String,
   friends: Array,
   profile: String,
+  online: Boolean,
 });
 
 module.exports = mongoose.model('user', userSchema);

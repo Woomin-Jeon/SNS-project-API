@@ -43,7 +43,10 @@ app.use(session({
 io.on('connection', (socket) => {
   socket.on('chat message', function(msg){
     const { message, userSocketID, userID } = msg;
-
+    console.log('-----------------------------')
+    console.log('To : ', userSocketID);
+    console.log('From : ', userID);
+    console.log('Message : ', message);
     io.to(userSocketID).emit('hello', { userID, message });
   });
 
@@ -56,6 +59,12 @@ app.get('/socket/:userid', (req, res) => {
   const userID = req.params.userid;
   const index = socketIdStore
     .findIndex(({id}) =>id === userID);
+
+  if (index === -1) {
+    res.send("400");
+    return;
+  }
+
   const userSocketID = socketIdStore[index].socket;
 
   res.send({ userSocketID });
@@ -123,6 +132,11 @@ app.post('/session', async (req, res) => {
   socketIdStore.push({ id: userID, socket: socketID });
 
   try {
+    await User.updateOne(
+      { id: userID },
+      { $set: { online: true } }
+    );
+
     const user = await User.findOne({ id: userID, pw: userPW });
 
     if (!user) {
@@ -138,12 +152,22 @@ app.post('/session', async (req, res) => {
   }
 });
 
-// 세션 제거
-app.patch('/session', (req, res) => {
+// 로그아웃 (세션 제거)
+app.patch('/session', async (req, res) => {
   const { userID } = req.body;
 
   const index = socketIdStore.findIndex(({id}) => id === userID);
   socketIdStore.splice(index, 1);
+
+  try {
+    await User.updateOne(
+      { id: userID },
+      { $set: { online: false } }
+    );
+  } catch (err) {
+    console.error(err);
+  }
+
 
   req.session.destroy();
   res.send();
