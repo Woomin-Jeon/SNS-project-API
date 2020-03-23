@@ -56,10 +56,12 @@ app.use('/childcomments', require('./routes/childcomments'));
 app.use('/like', require('./routes/like'));
 app.use('/commentlike', require('./routes/commentlike'));
 
-app.listen(port, () => {
-  console.log(`* Server is running at port ${port}...`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(port, () => {
+    console.log(`* Server is running at port ${port}...`);
+  });
 
-server.listen(socketPort, () => {
-  console.log(`* socket.io is connected at port ${port}...`);
-});
+  server.listen(socketPort, () => {
+    console.log(`* socket.io is connected at port ${port}...`);
+  });
+}
