@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
-const User = require('../models/user');
+const userRepo = require('../repository/user.repository');
 
 // GET 유저 목록
 router.get('/', async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await userRepo.getAllUsers();
     res.send({ userStore: users });
   } catch(err) {
     console.error(err);
@@ -19,16 +18,7 @@ router.post('/', async (req, res) => {
   const { id, pw, userName, birth, location, email, profile } = req.body;
 
   try {
-    await User.create({
-      id,
-      pw,
-      userName,
-      birth,
-      location,
-      email,
-      friends: [],
-      profile,
-    });
+    await userRepo.signUp(id, pw, userName, birth, location, email, profile);
     res.status(200).send();
   } catch (err){
     console.error(err);

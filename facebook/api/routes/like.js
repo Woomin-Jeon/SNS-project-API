@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
-
-const Post = require('../models/post');
+const PostRepo = require('../repository/post.repository');
 
 // 게시글 좋아요 +1
 router.patch('/', async (req, res) => {
   const { uniqueKey, currentUserID } = req.body;
 
   try {
-    await Post.updateOne(
-      { uniqueKey: uniqueKey },
-      { $addToSet: { thumbCount: currentUserID } }
-    );
-
-    const posts = await Post.find();
+    await PostRepo.like(uniqueKey, currentUserID);
+    const posts = await PostRepo.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);

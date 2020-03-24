@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
-
-const Post = require('../models/post');
-const Key = require('../models/key');
+const PostRepo = require('../repository/post.repository');
 
 // GET 게시글 목록
 router.get('/', async (req, res) => {
   try {
-    const posts = await Post.find();
+    const posts = await PostRepo.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
@@ -20,27 +18,8 @@ router.post('/', async (req, res) => {
   const { id, name, contents, profile, imagePath, time } = req.body;
 
   try {
-    await Key.updateOne(
-      { id: 'key' },
-      { $inc: { key: +1 } },
-    );
-
-    const key = await Key.findOne({ id: 'key' });
-
-    await Post.create({
-      uniqueKey: key.key,
-      id,
-      name,
-      profile,
-      contents,
-      time,
-      image: imagePath,
-      thumbCount: [],
-      sharingCount: 0,
-      commentCount: 0,
-      isEditButtonClicked: false,
-    });
-    const posts = await Post.find();
+    await PostRepo.createPost(id, name, contents, profile, imagePath, time);
+    const posts = await PostRepo.getAllPosts();
     res.status(200).send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);
@@ -50,11 +29,11 @@ router.post('/', async (req, res) => {
 
 // 게시글 삭제
 router.delete('/:uniquekey', async (req, res) => {
-  const specificPostUniqueKey = req.params.uniquekey;
+  const uniquekey = req.params.uniquekey;
 
   try {
-    const post = await Post.deleteOne({ uniqueKey: specificPostUniqueKey});
-    const posts = await Post.find();
+    await PostRepo.removePost(uniquekey);
+    const posts = await PostRepo.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
@@ -67,12 +46,8 @@ router.patch('/', async (req, res) => {
   const { uniqueKey, updatedContents } = req.body;
 
   try {
-    await Post.updateOne(
-      { uniqueKey: uniqueKey },
-      { $set : { contents: updatedContents } },
-    );
-
-    const posts = await Post.find();
+    await PostRepo.editPost(uniqueKey, updatedContents);
+    const posts = await PostRepo.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);

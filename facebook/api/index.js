@@ -50,7 +50,7 @@ app.use('/session', require('./routes/session'));
 app.use('/login', require('./routes/login'));
 app.use('/friends', require('./routes/friends'));
 app.use('/posts', require('./routes/posts'));
-app.use('/scraps', require('./routes/scraps'));
+app.use('/scraps', require('./unuse/scraps'));
 app.use('/comments', require('./routes/comments'));
 app.use('/childcomments', require('./routes/childcomments'));
 app.use('/like', require('./routes/like'));

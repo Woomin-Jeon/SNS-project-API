@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
-const socketIdStore = require('../store/socket');
-const User = require('../models/user');
+const userRepo = require('../repository/user.repository');
+const socketRepo = require('../repository/socket.repository');
+const funcRepo = require('../repository/function.repository');
 
 // 로그인화면에서 이미 세션이 존재하는가
 router.get('/', async (req, res) => {
@@ -12,11 +12,11 @@ router.get('/', async (req, res) => {
   }
 
   try {
-    const user = await User.findById(req.session.userID);
+    const user = await userRepo.findBySession(req);
     res.send({ user });
   } catch(err) {
     console.error(err);
-    res.status(500).send({ message: 'Server error' });
+    res.status(500).send({ message: 'Cannot register session to server' });
   }
 });
 
@@ -24,19 +24,17 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   const { userID, userPW, socketID } = req.body;
 
-  socketIdStore.push({ id: userID, socket: socketID });
-
   try {
-    const user = await User.findOne({ id: userID, pw: userPW });
-    if (!user) {
+    const user = await userRepo.getUserById(userID);
+    const validation = funcRepo.checkPassword(user, userPW);
+    if (!validation) {
       res.send({ status: 400, user: null });
       return;
     }
 
-    await User.updateOne(
-      { id: userID },
-      { $set: { online: true } }
-    );
+    socketRepo.registerSocket(userID, socketID);
+
+    await userRepo.onlineStatus(userID, true);
 
     req.session.userID = user._id;
     res.send({ user });
@@ -46,25 +44,18 @@ router.post('/', async (req, res) => {
   }
 });
 
-// 로그아웃 (세션 제거)
+// 로그아웃 (세션 및 socket.id 제거)
 router.patch('/', async (req, res) => {
   const { userID } = req.body;
 
-  const index = socketIdStore.findIndex(({id}) => id === userID);
-  socketIdStore.splice(index, 1);
-
   try {
-    await User.updateOne(
-      { id: userID },
-      { $set: { online: false } }
-    );
+    socketRepo.unregisterSocket(userID);
+    await userRepo.onlineStatus(userID, false);
+    req.session.destroy();
+    res.status(200).send();
   } catch (err) {
     console.error(err);
   }
-
-
-  req.session.destroy();
-  res.send();
 });
 
 module.exports = router;

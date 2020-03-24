@@ -1,19 +1,14 @@
 const express = require('express');
 const router = express.Router();
-
-const User = require('../models/user');
+const UserRepo = require('../repository/user.repository');
 
 // 친구 추가
 router.post('/', async (req, res) => {
   const { currentUserID, friendID } = req.body;
 
   try {
-    await User.updateOne(
-      { id: currentUserID },
-      { $addToSet: { friends: friendID } }
-    );
-
-    const users = await User.find();
+    await UserRepo.addFriend(currentUserID, friendID);
+    const users = await UserRepo.getAllUsers();
     res.send({ userStore: users });
   } catch(err) {
     console.error(err);
@@ -26,12 +21,8 @@ router.patch('/', async (req, res) => {
   const { currentUserID, friendID } = req.body;
 
   try {
-    await User.updateOne(
-      { id: currentUserID },
-      { $pull : { friends: friendID } }
-    );
-
-    const users = await User.find();
+    await UserRepo.removeFrined(currentUserID, friendID);
+    const users = await UserRepo.getAllUsers();
     res.send({ userStore: users });
   } catch(err) {
     console.error(err);
