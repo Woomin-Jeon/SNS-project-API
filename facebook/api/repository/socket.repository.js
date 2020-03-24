@@ -10,7 +10,7 @@ const SocketRepo = {
     socketIdStore.splice(index, 1);
   },
 
-  findbyUserID(userID) {
+  findByUserID(userID) {
     const index = socketIdStore
       .findIndex(({id}) =>id === userID);
 
