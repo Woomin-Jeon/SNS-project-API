@@ -8,7 +8,7 @@ const CommentRepo = {
 
   async createComment(uniqueKey, currentUserID, currentUserName, commentContents) {
     const key = await KeyRepo.getKey();
-    await Comment.create({
+    return await Comment.create({
       uniqueKey: key.key,
       id: uniqueKey,
       writerID: currentUserID,
@@ -21,14 +21,14 @@ const CommentRepo = {
   },
 
   async like(uniqueKey, userID) {
-    await Comment.updateOne(
+    return await Comment.updateOne(
       { uniqueKey: uniqueKey },
       { $addToSet: { commentThumbCount: userID } }
     );
   },
 
   async addChildComment(uniqueKey, contents, currentUserID, currentUserName) {
-    await Comment.updateOne(
+    return await Comment.updateOne(
       { uniqueKey: uniqueKey },
       { $push: {
           childComment: {

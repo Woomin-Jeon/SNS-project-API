@@ -6,17 +6,17 @@ const UserRepo = {
   },
 
   async signUp(id, pw, userName, birth, location, email, profile) {
-    await User.create({
+    return await User.create({
       id, pw, userName, birth, location, email, friends: [], profile,
     });
   },
 
   async uploadProfileImage(req) {
-    const {userId, filePath} = req.body;
+    const { userId, filePath } = req.body;
 
-    await User.updateOne(
-      {id: userId},
-      {$set: {profile: filePath}},
+    return await User.updateOne(
+      { id: userId },
+      { $set: {profile: filePath }},
     );
   },
 
@@ -29,21 +29,21 @@ const UserRepo = {
   },
 
   async onlineStatus(userID, bool) {
-    await User.updateOne(
+    return await User.updateOne(
       { id: userID },
       { $set: { online: bool } }
     );
   },
 
   async addFriend(userID, friendID) {
-    await User.updateOne(
+    return await User.updateOne(
       { id: userID },
       { $addToSet: { friends: friendID } }
     );
   },
 
   async removeFrined(userID, friendID) {
-    await User.updateOne(
+    return await User.updateOne(
       { id: userID },
       { $pull : { friends: friendID } }
     );
@@ -51,4 +51,5 @@ const UserRepo = {
 };
 
 module.exports = UserRepo;
+
 

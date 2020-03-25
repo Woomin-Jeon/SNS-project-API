@@ -8,7 +8,7 @@ const PostRepo = {
 
   async createPost(id, name, contents, profile, imagePath, time) {
     const key = await KeyRepo.getKey();
-    await Post.create({
+    return await Post.create({
       uniqueKey: key.key,
       id,
       name,
@@ -24,25 +24,25 @@ const PostRepo = {
   },
 
   async removePost(uniqueKey) {
-    await Post.deleteOne({ uniqueKey: uniqueKey});
+    return await Post.deleteOne({ uniqueKey: uniqueKey});
   },
 
   async editPost(uniqueKey, updatedContents) {
-    await Post.updateOne(
+    return await Post.updateOne(
       { uniqueKey: uniqueKey },
       { $set : { contents: updatedContents } },
     );
   },
 
   async like(uniqueKey, userID) {
-    await Post.updateOne(
+    return await Post.updateOne(
       { uniqueKey: uniqueKey },
       { $addToSet: { thumbCount: userID } }
     );
   },
 
   async plusCommentCount(uniqueKey) {
-    await Post.updateOne(
+    return await Post.updateOne(
       { uniqueKey: uniqueKey },
       { $inc: { commentCount: +1 } },
     );

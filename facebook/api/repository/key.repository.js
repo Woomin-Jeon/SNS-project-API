@@ -6,7 +6,6 @@ const KeyRepo = {
       { id: 'key' },
       { $inc: { key: +1 } },
     );
-
     return await Key.findOne({ id: 'key' });
   }
 };

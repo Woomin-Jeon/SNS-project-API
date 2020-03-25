@@ -1,6 +1,6 @@
 const socketIdStore = [];
 
-const SocketRepo = {
+const Socket = {
   registerSocket(userID, socketID) {
     socketIdStore.push({ id: userID, socket: socketID });
   },
@@ -22,4 +22,4 @@ const SocketRepo = {
   }
 };
 
-module.exports = SocketRepo;
+module.exports = Socket;

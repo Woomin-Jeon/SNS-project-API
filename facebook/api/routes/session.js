@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userRepo = require('../repository/user.repository');
-const socketRepo = require('../repository/socket.repository');
+const socketRepo = require('../function/socket');
 const funcRepo = require('../function/function');
 
 // 로그인화면에서 이미 세션이 존재하는가

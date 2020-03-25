@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const SocketRepo = require('../repository/socket.repository');
+const SocketFunc = require('../function/socket');
 
 // GET socket.id
 router.get('/:userid', (req, res) => {
   const userID = req.params.userid;
-  const userSocketID = SocketRepo.findByUserID(userID);
+  const userSocketID = SocketFunc.findByUserID(userID);
 
   if (userSocketID === null) {
     res.send("400");

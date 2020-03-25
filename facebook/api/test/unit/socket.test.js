@@ -1,6 +1,6 @@
-const SocketRepo = require('../../repository/socket.repository');
+const SocketFunc = require('../../function/socket');
 
-describe('SocketRepo', () => {
+describe('SocketFunc', () => {
   let id;
   let socket;
 
@@ -12,8 +12,8 @@ describe('SocketRepo', () => {
   describe('registerSocket', () => {
     describe('with \'socket ID\' from \'user ID\' is correct', () => {
       it('returns socket ID', () => {
-        SocketRepo.registerSocket(id, socket);
-        const validation = SocketRepo.findByUserID(id);
+        SocketFunc.registerSocket(id, socket);
+        const validation = SocketFunc.findByUserID(id);
         expect(validation).toBe(socket);
       });
     });
@@ -22,8 +22,8 @@ describe('SocketRepo', () => {
   describe('unregisterSocket', () => {
     describe('with \'socket ID\' from \'user ID\' is null', () => {
       it('returns null', () => {
-        SocketRepo.unregisterSocket(id);
-        const validation = SocketRepo.findByUserID(id);
+        SocketFunc.unregisterSocket(id);
+        const validation = SocketFunc.findByUserID(id);
         expect(validation).toBe(null);
       });
     });
