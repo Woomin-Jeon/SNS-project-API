@@ -40,12 +40,12 @@ describe('UserRepo', () => {
         profile: 'TEST_PROFILE_FILE_PATH',
         friends: [],
         online: false,
-      }, { example: 'user 1'}, { example: 'user 2' }]);
+      }, { example: 'user 1'}, { example: 'user 2' }, { example: 'etc...'}]);
     });
 
     it('returns users', async () => {
       const users = await UserRepo.getAllUsers();
-      expect(users.length).toBe(3);
+      expect(users.length).toBe(4);
     });
   });
 
@@ -231,6 +231,7 @@ describe('UserRepo', () => {
     beforeEach(() => {
       friendID = 'REMOVED_FRIEND';
       friends = ['friend 1', 'friend 2', 'friend 3'];
+
       User.updateOne = jest.fn().mockResolvedValue({
         friends: ['friend 1', 'friend 2'],
       })
