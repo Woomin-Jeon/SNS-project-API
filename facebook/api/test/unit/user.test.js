@@ -1,7 +1,7 @@
-const UserRepo = require('../../repository/user.repository');
+const UserService = require('../../service/user.service');
 const User = require('../../models/user');
 
-describe('UserRepo', () => {
+describe('UserService', () => {
   let validUser;
 
   let req;
@@ -44,7 +44,8 @@ describe('UserRepo', () => {
     });
 
     it('returns users', async () => {
-      const users = await UserRepo.getAllUsers();
+      const users = await UserService.getAllUsers();
+
       expect(users.length).toBe(4);
     });
   });
@@ -64,7 +65,8 @@ describe('UserRepo', () => {
       });
 
       it('returns new user', async () => {
-        const user = await UserRepo.signUp(id, pw, userName, birth, location, email, profile);
+        const user = await UserService.signUp(id, pw, userName, birth, location, email, profile);
+
         expect(user).toEqual(validUser);
       });
     });
@@ -92,8 +94,9 @@ describe('UserRepo', () => {
       });
 
       it('returns error', async () => {
-        const user = await UserRepo.signUp();
+        const user = await UserService.signUp();
         const validation = user === validUser ? 'correct' : 'error';
+
         expect(validation).toBe('error');
       })
     });
@@ -114,7 +117,8 @@ describe('UserRepo', () => {
     });
 
     it('returns uploaded profile path', async () => {
-      const user = await UserRepo.uploadProfileImage(req);
+      const user = await UserService.uploadProfileImage(req);
+
       expect(user.profile).toBe(req.body.filePath);
     });
   });
@@ -134,7 +138,8 @@ describe('UserRepo', () => {
       });
 
       it('returns user matching session ID', async () => {
-        const user = await UserRepo.findBySession(req);
+        const user = await UserService.findBySession(req);
+
         expect(user).toBe(validUser);
       });
     });
@@ -145,7 +150,7 @@ describe('UserRepo', () => {
       });
 
       it('returns null', async () => {
-        const user = await UserRepo.findBySession(req);
+        const user = await UserService.findBySession(req);
         expect(user).toBe(null);
       });
     });
@@ -161,7 +166,7 @@ describe('UserRepo', () => {
       });
 
       it('returns user matching user ID', async () => {
-        const user = await UserRepo.getUserById(id);
+        const user = await UserService.getUserById(id);
         expect(user).toBe(validUser);
       });
     });
@@ -174,7 +179,7 @@ describe('UserRepo', () => {
       });
 
       it('returns null', async () => {
-        const user = await UserRepo.getUserById(id);
+        const user = await UserService.getUserById(id);
         expect(user).toBe(null);
       });
     });
@@ -189,7 +194,7 @@ describe('UserRepo', () => {
       });
 
       it('returns true', async () => {
-        const user = await UserRepo.onlineStatus(id, true);
+        const user = await UserService.onlineStatus(id, true);
         expect(user.online).toBe(true);
       });
     });
@@ -202,7 +207,7 @@ describe('UserRepo', () => {
       });
 
       it('returns false', async () => {
-        const user = await UserRepo.onlineStatus(id, false);
+        const user = await UserService.onlineStatus(id, false);
         expect(user.online).toBe(false);
       });
     });
@@ -220,7 +225,7 @@ describe('UserRepo', () => {
     });
 
     it('returns friend', async () => {
-      const user = await UserRepo.addFriend(id, friendID);
+      const user = await UserService.addFriend(id, friendID);
       expect(user.friends.length).toBe(1);
     });
   });
@@ -238,7 +243,7 @@ describe('UserRepo', () => {
     });
 
     it('returns friends.length -1', async () => {
-      const user = await UserRepo.removeFriend(id, friendID);
+      const user = await UserService.removeFriend(id, friendID);
       expect(user.friends.length).toBe(friends.length -1);
     });
   });

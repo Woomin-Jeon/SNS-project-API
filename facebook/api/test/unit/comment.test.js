@@ -1,12 +1,12 @@
-const CommentRepo = require('../../repository/comment.repository');
-const KeyRepo = require('../../repository/key.repository');
+const CommentService = require('../../service/comment.service');
+const Method = require('../../utils/methods');
 const Comment = require('../../models/comment');
 
-describe('CommentRepo', () => {
+describe('CommentService', () => {
   let validComment;
 
   beforeEach(() => {
-    KeyRepo.getKey = jest.fn().mockResolvedValue('TEST_KEY');
+    Method.getKey = jest.fn().mockResolvedValue('TEST_KEY');
 
     validComment = {
       uniqueKey: 999,
@@ -35,7 +35,7 @@ describe('CommentRepo', () => {
     });
 
     it('returns comments', async () => {
-      const comments = await CommentRepo.getAllComments();
+      const comments = await CommentService.getAllComments();
       expect(comments.length).toBe(4);
     });
   });
@@ -66,7 +66,7 @@ describe('CommentRepo', () => {
       });
 
       it('returns new comment', async () => {
-        const comment = await CommentRepo.createComment(uniqueKey, id, name, contents);
+        const comment = await CommentService.createComment(uniqueKey, id, name, contents);
         expect(comment).toEqual(validComment);
       });
     });
@@ -91,7 +91,7 @@ describe('CommentRepo', () => {
       });
 
       it('returns error', async () => {
-        const comment = await CommentRepo.createComment(uniqueKey, id, name, contents);
+        const comment = await CommentService.createComment(uniqueKey, id, name, contents);
         const validation = comment === validComment ? 'correct' : 'error';
         expect(validation).toBe('error');
       });
@@ -114,7 +114,7 @@ describe('CommentRepo', () => {
     });
 
     it('returns commentThumbCount.length + 1', async () => {
-      const comment = await CommentRepo.like(uniqueKey, id);
+      const comment = await CommentService.like(uniqueKey, id);
       expect(comment.commentThumbCount.length).toBe(commentThumbCount.length + 1);
     });
   });
@@ -146,7 +146,7 @@ describe('CommentRepo', () => {
     });
 
     it('returns childComment.length + 1', async () => {
-      const comment = await  CommentRepo.addChildComment(uniqueKey, contents, id);
+      const comment = await  CommentService.addChildComment(uniqueKey, contents, id);
       expect(comment.childComment.length).toBe(childComment.length + 1);
     });
   });

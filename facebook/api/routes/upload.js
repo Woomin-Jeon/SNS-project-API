@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const KeyRepo = require('../repository/key.repository');
+const Method = require('../utils/methods');
 
 // 파일 업로드
 router.post('/', async (req, res) => {
@@ -9,7 +9,7 @@ router.post('/', async (req, res) => {
     return;
   }
 
-  const key = KeyRepo.getKey();
+  const key = Method.getKey();
   const file = req.files.file;
   const filePath = `${__dirname}/../../FrontEnd/img/${key.id}${file.name}`;
 

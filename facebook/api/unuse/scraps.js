@@ -17,7 +17,7 @@ router.post('/', async (req, res) => {
     const key = await Key.findOne({ id: 'key' });
 
     await Scrap.create({
-      uniqueKey: key.key,
+      uniqueKey: key,
       id: whoScrapedByID,
       whoDid: whoScrapedByName,
       name: whoWritePostByName,

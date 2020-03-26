@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const PostRepo = require('../repository/post.repository');
+const PostService = require('../service/post.service');
 
 // GET 게시글 목록
 router.get('/', async (req, res) => {
   try {
-    const posts = await PostRepo.getAllPosts();
+    const posts = await PostService.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
@@ -18,8 +18,8 @@ router.post('/', async (req, res) => {
   const { id, name, contents, profile, imagePath, time } = req.body;
 
   try {
-    await PostRepo.createPost(id, name, contents, profile, imagePath, time);
-    const posts = await PostRepo.getAllPosts();
+    await PostService.createPost(id, name, contents, profile, imagePath, time);
+    const posts = await PostService.getAllPosts();
     res.status(200).send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);
@@ -32,8 +32,8 @@ router.delete('/:uniquekey', async (req, res) => {
   const uniquekey = req.params.uniquekey;
 
   try {
-    await PostRepo.removePost(uniquekey);
-    const posts = await PostRepo.getAllPosts();
+    await PostService.removePost(uniquekey);
+    const posts = await PostService.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
@@ -46,8 +46,8 @@ router.patch('/', async (req, res) => {
   const { uniqueKey, updatedContents } = req.body;
 
   try {
-    await PostRepo.editPost(uniqueKey, updatedContents);
-    const posts = await PostRepo.getAllPosts();
+    await PostService.editPost(uniqueKey, updatedContents);
+    const posts = await PostService.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);

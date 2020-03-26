@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const CommentRepo = require('../repository/comment.repository');
-const PostRepo = require('../repository/post.repository');
+const CommentService = require('../service/comment.service');
+const PostService = require('../service/post.service');
 
 // GET 댓글 목록
 router.get('/', async (req, res) => {
-  const comments = await CommentRepo.getAllComments();
+  const comments = await CommentService.getAllComments();
   res.send({ postComments: comments });
 });
 
@@ -14,8 +14,8 @@ router.post('/', async (req, res) => {
   const { uniqueKey, currentUserID, currentUserName, commentContents } = req.body;
 
   try {
-    await CommentRepo.createComment(uniqueKey, currentUserID, currentUserName, commentContents);
-    const comments = await CommentRepo.getAllComments();
+    await CommentService.createComment(uniqueKey, currentUserID, currentUserName, commentContents);
+    const comments = await CommentService.getAllComments();
     res.status(200).send({ postComments: comments});
   } catch (err) {
     console.error(err);
@@ -27,8 +27,8 @@ router.post('/', async (req, res) => {
 router.patch('/', async (req, res) => {
   const { uniqueKey } = req.body;
 
-  await PostRepo.plusCommentCount(uniqueKey);
-  const posts = await PostRepo.getAllPosts();
+  await PostService.plusCommentCount(uniqueKey);
+  const posts = await PostService.getAllPosts();
   res.send({ timeLinePosts: posts });
 });
 

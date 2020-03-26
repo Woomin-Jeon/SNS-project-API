@@ -1,4 +1,4 @@
-const KeyRepo = require('./key.repository');
+const Method = require('../utils/methods');
 const Comment = require('../models/comment');
 
 const CommentRepo = {
@@ -7,9 +7,9 @@ const CommentRepo = {
   },
 
   async createComment(uniqueKey, currentUserID, currentUserName, commentContents) {
-    const key = await KeyRepo.getKey();
+    const key = await Method.getKey();
     return await Comment.create({
-      uniqueKey: key.key,
+      uniqueKey: key,
       id: uniqueKey,
       writerID: currentUserID,
       writer: currentUserName,

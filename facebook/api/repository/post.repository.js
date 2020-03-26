@@ -1,4 +1,4 @@
-const KeyRepo = require('./key.repository');
+const Method = require('../utils/methods');
 const Post = require('../models/post');
 
 const PostRepo = {
@@ -7,9 +7,9 @@ const PostRepo = {
   },
 
   async createPost(id, name, contents, profile, imagePath, time) {
-    const key = await KeyRepo.getKey();
+    const key = await Method.getKey();
     return await Post.create({
-      uniqueKey: key.key,
+      uniqueKey: key,
       id,
       name,
       profile,

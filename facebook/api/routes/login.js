@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const userRepo = require('../repository/user.repository');
+const userService = require('../service/user.service');
 
 // GET 유저 목록
 router.get('/', async (req, res) => {
   try {
-    const users = await userRepo.getAllUsers();
+    const users = await userService.getAllUsers();
     res.send({ userStore: users });
   } catch(err) {
     console.error(err);
@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
   const { id, pw, userName, birth, location, email, profile } = req.body;
 
   try {
-    await userRepo.signUp(id, pw, userName, birth, location, email, profile);
+    await userService.signUp(id, pw, userName, birth, location, email, profile);
     res.status(200).send();
   } catch (err){
     console.error(err);

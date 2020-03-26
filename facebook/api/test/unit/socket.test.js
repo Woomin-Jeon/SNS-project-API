@@ -1,4 +1,4 @@
-const SocketFunc = require('../../function/socket');
+const SocketFunc = require('../../utils/socket');
 
 describe('SocketFunc', () => {
   let id;

@@ -11,9 +11,7 @@ const UserRepo = {
     });
   },
 
-  async uploadProfileImage(req) {
-    const { userId, filePath } = req.body;
-
+  async uploadProfileImage(userId, filePath) {
     return await User.updateOne(
       { id: userId },
       { $set: {profile: filePath }},

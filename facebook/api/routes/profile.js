@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const userRepo = require('../repository/user.repository');
+const userService = require('../service/user.service');
 
 // 프로필 사진 업로드
 router.patch('/', async (req, res) => {
   try {
-    await userRepo.uploadProfileImage(req);
+    const { userId, filePath } = req.body;
+
+    await userService.uploadProfileImage(userId, filePath);
     res.status(200).send();
   } catch (err) {
     console.error(err);

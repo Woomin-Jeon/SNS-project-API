@@ -1,10 +1,10 @@
-const PostRepo = require('../../repository/post.repository');
-const KeyRepo = require('../../repository/key.repository');
+const PostService = require('../../service/post.service');
+const Method = require('../../utils/methods');
 const Post = require('../../models/post');
 
-describe('PostRepo', () => {
+describe('PostService', () => {
   beforeEach(() => {
-    KeyRepo.getKey = jest.fn().mockResolvedValue(999);
+    Method.getKey = jest.fn().mockResolvedValue(999);
   });
 
   describe('createPost', () => {
@@ -58,7 +58,7 @@ describe('PostRepo', () => {
       });
 
       it('returns new post', async () => {
-        const post = await PostRepo.createPost(id, name, contents, profile, imagePath, time);
+        const post = await PostService.createPost(id, name, contents, profile, imagePath, time);
         expect(post).toEqual(validPost);
       });
     });
@@ -88,7 +88,7 @@ describe('PostRepo', () => {
       });
 
       it('returns error', async () => {
-        const post = await PostRepo.createPost(id, name, contents, profile, imagePath, time);
+        const post = await PostService.createPost(id, name, contents, profile, imagePath, time);
         const validation = post !== validPost ? 'error' : 'correct';
         expect(validation).toBe('error');
       });
@@ -120,7 +120,7 @@ describe('PostRepo', () => {
       });
 
       it('returns updated contents', async () => {
-        const post = await PostRepo.editPost(uniqueKey, updatedContents);
+        const post = await PostService.editPost(uniqueKey, updatedContents);
         expect(post.contents).toBe(updatedContents);
       });
     });
@@ -133,7 +133,7 @@ describe('PostRepo', () => {
       });
 
       it('returns null', async () => {
-        const post = await PostRepo.editPost(uniqueKey, updatedContents);
+        const post = await PostService.editPost(uniqueKey, updatedContents);
         expect(post).toBe(null);
       });
     });
@@ -159,7 +159,7 @@ describe('PostRepo', () => {
     });
 
     it('returns posts', async () => {
-      const posts = await PostRepo.getAllPosts();
+      const posts = await PostService.getAllPosts();
       expect(posts.length).toBe(4);
     });
   });
@@ -191,7 +191,7 @@ describe('PostRepo', () => {
 
       it('returns removed post', async () => {
         uniqueKey = 'valid uniqueKey';
-        const post = await PostRepo.removePost(uniqueKey);
+        const post = await PostService.removePost(uniqueKey);
         expect(post).toEqual(willBeRemovedPost);
       });
     });
@@ -203,7 +203,7 @@ describe('PostRepo', () => {
 
       it('returns null', async () => {
         uniqueKey = 'invalid uniqueKey';
-        const post = await PostRepo.removePost(uniqueKey);
+        const post = await PostService.removePost(uniqueKey);
         expect(post).toEqual(null);
       });
     });
