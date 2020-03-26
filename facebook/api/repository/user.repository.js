@@ -42,7 +42,7 @@ const UserRepo = {
     );
   },
 
-  async removeFrined(userID, friendID) {
+  async removeFriend(userID, friendID) {
     return await User.updateOne(
       { id: userID },
       { $pull : { friends: friendID } }

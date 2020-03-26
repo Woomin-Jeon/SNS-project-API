@@ -3,7 +3,6 @@ const KeyRepo = require('../../repository/key.repository');
 const Post = require('../../models/post');
 
 describe('PostRepo', () => {
-  let data;
   beforeEach(() => {
     KeyRepo.getKey = jest.fn().mockResolvedValue(999);
   });
@@ -34,7 +33,7 @@ describe('PostRepo', () => {
       };
     });
 
-    describe('with all argument', () => {
+    describe('with all arguments', () => {
       beforeEach(() => {
         Post.create = jest.fn().mockResolvedValue({
           uniqueKey: 999,
@@ -64,7 +63,7 @@ describe('PostRepo', () => {
       });
     });
 
-    describe('with insufficient argument', () => {
+    describe('with insufficient arguments', () => {
       beforeEach(() => {
         Post.create = jest.fn().mockResolvedValue({
           uniqueKey: 999,

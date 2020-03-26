@@ -21,7 +21,7 @@ router.patch('/', async (req, res) => {
   const { currentUserID, friendID } = req.body;
 
   try {
-    await UserRepo.removeFrined(currentUserID, friendID);
+    await UserRepo.removeFriend(currentUserID, friendID);
     const users = await UserRepo.getAllUsers();
     res.send({ userStore: users });
   } catch(err) {
