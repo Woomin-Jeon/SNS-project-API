@@ -1,14 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const CommentService = require('../service/comment.service');
+const commentService = require('../service/commentService');
 
 // 댓글 좋아요 +1
 router.patch('/', async (req, res) => {
   const { uniqueKey, currentUserID } = req.body;
 
   try {
-    await CommentService.like(uniqueKey, currentUserID);
-    const comments = await CommentService.getAllComments();
+    await commentService.like(uniqueKey, currentUserID);
+    const comments = await commentService.getAllComments();
     res.send({ postComments: comments });
   } catch(err) {
     console.error(err);

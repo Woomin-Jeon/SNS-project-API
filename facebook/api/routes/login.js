@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const userService = require('../service/user.service');
+const userService = require('../service/userService');
+const vaildate = require('../middleware/validate');
+const { validateUser } = require('../models/user');
 
 // GET 유저 목록
 router.get('/', async (req, res) => {
@@ -14,11 +16,9 @@ router.get('/', async (req, res) => {
 });
 
 // 회원가입
-router.post('/', async (req, res) => {
-  const { id, pw, userName, birth, location, email, profile } = req.body;
-
+router.post('/', vaildate(validateUser), async (req, res) => {
   try {
-    await userService.signUp(id, pw, userName, birth, location, email, profile);
+    await userService.signUp(req.body);
     res.status(200).send();
   } catch (err){
     console.error(err);

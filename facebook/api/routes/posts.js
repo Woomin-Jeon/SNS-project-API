@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const PostService = require('../service/post.service');
+const postService = require('../service/postService');
+const validate = require('../middleware/validate');
+const { validatePost } = require('../models/post');
 
 // GET 게시글 목록
 router.get('/', async (req, res) => {
   try {
-    const posts = await PostService.getAllPosts();
+    const posts = await postService.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
@@ -14,12 +16,10 @@ router.get('/', async (req, res) => {
 });
 
 // 게시글 등록
-router.post('/', async (req, res) => {
-  const { id, name, contents, profile, imagePath, time } = req.body;
-
+router.post('/', validate(validatePost), async (req, res) => {
   try {
-    await PostService.createPost(id, name, contents, profile, imagePath, time);
-    const posts = await PostService.getAllPosts();
+    await postService.createPost(req.body);
+    const posts = await postService.getAllPosts();
     res.status(200).send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);
@@ -32,8 +32,8 @@ router.delete('/:uniquekey', async (req, res) => {
   const uniquekey = req.params.uniquekey;
 
   try {
-    await PostService.removePost(uniquekey);
-    const posts = await PostService.getAllPosts();
+    await postService.removePost(uniquekey);
+    const posts = await postService.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
@@ -46,8 +46,8 @@ router.patch('/', async (req, res) => {
   const { uniqueKey, updatedContents } = req.body;
 
   try {
-    await PostService.editPost(uniqueKey, updatedContents);
-    const posts = await PostService.getAllPosts();
+    await postService.editPost(uniqueKey, updatedContents);
+    const posts = await postService.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userService = require('../service/user.service');
+const userService = require('../service/userService');
 
 // 프로필 사진 업로드
 router.patch('/', async (req, res) => {

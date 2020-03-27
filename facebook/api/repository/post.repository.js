@@ -1,12 +1,14 @@
 const Method = require('../utils/methods');
-const Post = require('../models/post');
+const { Post } = require('../models/post');
 
 const PostRepo = {
   async getAllPosts() {
     return await Post.find();
   },
 
-  async createPost(id, name, contents, profile, imagePath, time) {
+  async createPost(postInformation) {
+    const { id, name, contents, profile, imagePath, time } = postInformation;
+
     const key = await Method.getKey();
     return await Post.create({
       uniqueKey: key,

@@ -1,11 +1,13 @@
-const User = require('../models/user');
+const { User } = require('../models/user');
 
 const UserRepo = {
   async getAllUsers() {
     return await User.find();
   },
 
-  async signUp(id, pw, userName, birth, location, email, profile) {
+  async signUp(userInformation) {
+    const { id, pw, userName, birth, location, email, profile } = userInformation;
+
     return await User.create({
       id, pw, userName, birth, location, email, friends: [], profile,
     });
@@ -14,7 +16,7 @@ const UserRepo = {
   async uploadProfileImage(userId, filePath) {
     return await User.updateOne(
       { id: userId },
-      { $set: {profile: filePath }},
+      { $set: { profile: filePath }},
     );
   },
 
@@ -23,7 +25,7 @@ const UserRepo = {
   },
 
   async getUserById(userID) {
-    return await User.findOne({id: userID});
+    return await User.findOne({ id: userID });
   },
 
   async onlineStatus(userID, bool) {

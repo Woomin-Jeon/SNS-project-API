@@ -1,6 +1,6 @@
-const SocketFunc = require('../../utils/socket');
+const socketFunc = require('../../utils/socket');
 
-describe('SocketFunc', () => {
+describe('socketFunc', () => {
   let id;
   let socket;
 
@@ -12,8 +12,8 @@ describe('SocketFunc', () => {
   describe('registerSocket', () => {
     describe('with \'socket ID\' from \'user ID\' is correct', () => {
       it('returns socket ID', () => {
-        SocketFunc.registerSocket(id, socket);
-        const validation = SocketFunc.findByUserID(id);
+        socketFunc.registerSocket(id, socket);
+        const validation = socketFunc.findByUserID(id);
         expect(validation).toBe(socket);
       });
     });
@@ -22,8 +22,8 @@ describe('SocketFunc', () => {
   describe('unregisterSocket', () => {
     describe('with \'socket ID\' from \'user ID\' is null', () => {
       it('returns null', () => {
-        SocketFunc.unregisterSocket(id);
-        const validation = SocketFunc.findByUserID(id);
+        socketFunc.unregisterSocket(id);
+        const validation = socketFunc.findByUserID(id);
         expect(validation).toBe(null);
       });
     });

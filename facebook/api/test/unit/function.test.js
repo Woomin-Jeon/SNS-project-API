@@ -1,6 +1,6 @@
-const Method = require('../../utils/methods');
+const method = require('../../utils/methods');
 
-describe('Method', () => {
+describe('method', () => {
   describe('checkPassword', () => {
     const user = { id: 'TEST_ID' };
     const pw = 'RIGHT_PASSWORD';
@@ -11,7 +11,7 @@ describe('Method', () => {
       });
 
       it('returns true', () => {
-        const validation = Method.checkPassword(user, pw);
+        const validation = method.checkPassword(user, pw);
         expect(validation).toBe(true);
       });
     });
@@ -22,7 +22,7 @@ describe('Method', () => {
       });
 
       it('returns false', () => {
-        const validation = Method.checkPassword(user, pw);
+        const validation = method.checkPassword(user, pw);
         expect(validation).toBe(false);
       });
     })

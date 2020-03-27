@@ -15,4 +15,17 @@ const postSchema = new Schema({
   isEditButtonClicked: Boolean, // 수정버튼이 눌렸는가?
 });
 
-module.exports = mongoose.model('post', postSchema);
+const Post = mongoose.model('post', postSchema);
+
+const validatePost = (postInformation) => {
+  const { id, name, contents, profile } = postInformation;
+
+  if (!id || !name || !contents || !profile) {
+    return false;
+  }
+
+  return true;
+};
+
+exports.validatePost = validatePost;
+exports.Post = Post;

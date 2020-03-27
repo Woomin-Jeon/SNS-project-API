@@ -13,4 +13,17 @@ const userSchema = new Schema({
   online: Boolean,
 });
 
-module.exports = mongoose.model('user', userSchema);
+const User = mongoose.model('user', userSchema);
+
+const validateUser = (userInformation) => {
+  const { id, pw, userName, birth, location, email, profile } = userInformation;
+
+  if (!id || !pw || !userName || !birth || !location || !email || !profile) {
+    return false;
+  }
+
+  return true;
+};
+
+exports.validateUser = validateUser;
+exports.User = User;

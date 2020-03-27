@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const userService = require('../service/user.service');
+const userService = require('../service/userService');
 const socketRepo = require('../utils/socket');
 const funcRepo = require('../utils/methods');
 

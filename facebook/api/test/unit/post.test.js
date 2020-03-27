@@ -1,14 +1,14 @@
-const PostService = require('../../service/post.service');
-const Method = require('../../utils/methods');
-const Post = require('../../models/post');
+const postService = require('../../service/postService');
+const postRepo = require('../../repository/post.repository');
+const method = require('../../utils/methods');
 
-describe('PostService', () => {
+describe('postService', () => {
   beforeEach(() => {
-    Method.getKey = jest.fn().mockResolvedValue(999);
+    method.getKey = jest.fn().mockResolvedValue(999);
   });
 
   describe('createPost', () => {
-    let validPost;
+    let post_prototype;
 
     let id;
     let name;
@@ -18,7 +18,7 @@ describe('PostService', () => {
     let time;
 
     beforeEach(() => {
-      validPost = {
+      post_prototype = {
         uniqueKey: 999,
         id: 'TEST_ID',
         name: 'TEST_NAME',
@@ -31,67 +31,21 @@ describe('PostService', () => {
         commentCount: 0,
         isEditButtonClicked: false,
       };
+
+      id = 'TEST_ID';
+      name = 'TEST_NAME';
+      contents = 'TEST_CONTENTS';
+      profile = 'TEST_PROFILE';
+      imagePath = 'TEST_IMAGE';
+      time = ['TEST_TIME'];
+
+      postRepo.createPost = jest.fn().mockResolvedValue(post_prototype);
     });
 
-    describe('with all arguments', () => {
-      beforeEach(() => {
-        Post.create = jest.fn().mockResolvedValue({
-          uniqueKey: 999,
-          id: 'TEST_ID',
-          name: 'TEST_NAME',
-          profile: 'TEST_PROFILE',
-          contents: 'TEST_CONTENTS',
-          time: ['TEST_TIME'],
-          image: 'TEST_IMAGE',
-          thumbCount: ['TEST_THUMBCOUNT'],
-          sharingCount: 0,
-          commentCount: 0,
-          isEditButtonClicked: false,
-        });
+    it('returns new post', async () => {
+      const post = await postService.createPost(id, name, contents, profile, imagePath, time);
 
-        id = 'TEST_ID';
-        name = 'TEST_NAME';
-        contents = 'TEST_CONTENTS';
-        profile = 'TEST_PROFILE';
-        imagePath = 'TEST_IMAGE';
-        time = ['TEST_TIME'];
-      });
-
-      it('returns new post', async () => {
-        const post = await PostService.createPost(id, name, contents, profile, imagePath, time);
-        expect(post).toEqual(validPost);
-      });
-    });
-
-    describe('with insufficient arguments', () => {
-      beforeEach(() => {
-        Post.create = jest.fn().mockResolvedValue({
-          uniqueKey: 999,
-          id: null,
-          name: 'TEST_NAME',
-          profile: 'TEST_PROFILE',
-          contents: null,
-          time: ['TEST_TIME'],
-          image: null,
-          thumbCount: ['TEST_THUMBCOUNT'],
-          sharingCount: 0,
-          commentCount: 0,
-          isEditButtonClicked: false,
-        });
-
-        id;
-        name = 'TEST_NAME';
-        contents;
-        profile = 'TEST_PROFILE';
-        imagePath;
-        time = ['TEST_TIME'];
-      });
-
-      it('returns error', async () => {
-        const post = await PostService.createPost(id, name, contents, profile, imagePath, time);
-        const validation = post !== validPost ? 'error' : 'correct';
-        expect(validation).toBe('error');
-      });
+      expect(post).toBeDefined();
     });
   });
 
@@ -99,49 +53,35 @@ describe('PostService', () => {
     let uniqueKey;
     let updatedContents;
 
-    describe('with valid uniqueKey', () => {
-      beforeEach(() => {
-        uniqueKey = 999;
-        updatedContents = 'UPDATED_CONTENTS';
+    beforeEach(() => {
+      uniqueKey = 999;
+      updatedContents = 'UPDATED_CONTENTS';
 
-        Post.updateOne = jest.fn().mockResolvedValue({
-          uniqueKey: uniqueKey,
-          id: 'TEST_ID',
-          name: 'TEST_NAME',
-          profile: 'TEST_PROFILE',
-          contents: updatedContents,
-          time: ['TEST_TIME'],
-          image: 'TEST_IMAGE',
-          thumbCount: ['TEST_THUMBCOUNT'],
-          sharingCount: 0,
-          commentCount: 0,
-          isEditButtonClicked: false,
-        });
-      });
-
-      it('returns updated contents', async () => {
-        const post = await PostService.editPost(uniqueKey, updatedContents);
-        expect(post.contents).toBe(updatedContents);
+      postRepo.editPost = jest.fn().mockResolvedValue({
+        uniqueKey: uniqueKey,
+        id: 'TEST_ID',
+        name: 'TEST_NAME',
+        profile: 'TEST_PROFILE',
+        contents: updatedContents,
+        time: ['TEST_TIME'],
+        image: 'TEST_IMAGE',
+        thumbCount: ['TEST_THUMBCOUNT'],
+        sharingCount: 0,
+        commentCount: 0,
+        isEditButtonClicked: false,
       });
     });
 
-    describe('with invalid uniqueKey', () => {
-      beforeEach(() => {
-        uniqueKey = -999;
-        updatedContents = 'UPDATED_CONTENTS';
-        Post.updateOne = jest.fn().mockResolvedValue(null);
-      });
+    it('returns updated contents', async () => {
+      const post = await postService.editPost(uniqueKey, updatedContents);
 
-      it('returns null', async () => {
-        const post = await PostService.editPost(uniqueKey, updatedContents);
-        expect(post).toBe(null);
-      });
+      expect(post).toHaveProperty('contents', updatedContents);
     });
   });
 
   describe('getAllPosts', () => {
     beforeEach(() => {
-      Post.find = jest.fn().mockResolvedValue([
+      postRepo.getAllPosts = jest.fn().mockResolvedValue([
         {
           uniqueKey: 999,
           id: 'TEST_ID',
@@ -159,8 +99,9 @@ describe('PostService', () => {
     });
 
     it('returns posts', async () => {
-      const posts = await PostService.getAllPosts();
-      expect(posts.length).toBe(4);
+      const posts = await postService.getAllPosts();
+
+      expect(posts).toHaveLength(4);
     });
   });
 
@@ -169,6 +110,7 @@ describe('PostService', () => {
     let willBeRemovedPost;
 
     beforeEach(() => {
+      uniqueKey = 'valid uniqueKey';
       willBeRemovedPost = {
         uniqueKey: 'valid uniqueKey',
         id: 'TEST_ID',
@@ -182,30 +124,14 @@ describe('PostService', () => {
         commentCount: 0,
         isEditButtonClicked: false,
       };
+
+      postRepo.removePost = jest.fn().mockResolvedValue(willBeRemovedPost);
     });
 
-    describe('with valid uniqueKey', () => {
-      beforeEach(() => {
-        Post.deleteOne = jest.fn().mockResolvedValue(willBeRemovedPost);
-      });
+    it('returns removed post', async () => {
+      const post = await postService.removePost(uniqueKey);
 
-      it('returns removed post', async () => {
-        uniqueKey = 'valid uniqueKey';
-        const post = await PostService.removePost(uniqueKey);
-        expect(post).toEqual(willBeRemovedPost);
-      });
-    });
-
-    describe('with invalid uniqueKey', () => {
-      beforeEach(() => {
-        Post.deleteOne = jest.fn().mockResolvedValue(null);
-      });
-
-      it('returns null', async () => {
-        uniqueKey = 'invalid uniqueKey';
-        const post = await PostService.removePost(uniqueKey);
-        expect(post).toEqual(null);
-      });
+      expect(post).toMatchObject(willBeRemovedPost);
     });
   });
 });

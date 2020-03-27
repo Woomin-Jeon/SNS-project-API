@@ -1,18 +1,9 @@
-const UserService = require('../../service/user.service');
-const User = require('../../models/user');
+const userService = require('../../service/userService');
+const userRepo = require('../../repository/user.repository');
 
-describe('UserService', () => {
+describe('userService', () => {
   let validUser;
-
   let req;
-
-  let id;
-  let pw;
-  let userName;
-  let birth;
-  let location;
-  let email;
-  let profile;
 
   beforeEach(() => {
     validUser = {
@@ -30,7 +21,7 @@ describe('UserService', () => {
 
   describe('getAllUsers', () => {
     beforeEach(() => {
-      User.find = jest.fn().mockResolvedValue([{
+      userRepo.getAllUsers = jest.fn().mockResolvedValue([{
         id: 'TEST_USER_ID',
         pw: 'TEST_USER_PASSWORD',
         userName: 'TESTER',
@@ -44,61 +35,38 @@ describe('UserService', () => {
     });
 
     it('returns users', async () => {
-      const users = await UserService.getAllUsers();
+      const users = await userService.getAllUsers();
 
-      expect(users.length).toBe(4);
+      expect(users).toHaveLength(4);
     });
   });
 
   describe('signUp', () => {
-    describe('with all arguments', () => {
-      beforeEach(() => {
-        id = 'TEST_USER_ID';
-        pw = 'TEST_USER_PASSWORD';
-        userName = 'TESTER';
-        birth = '1996-04-21';
-        location = 'SEOUL_KOREA';
-        email = 'test@email.com';
-        profile = 'TEST_PROFILE_FILE_PATH';
+    let id;
+    let pw;
+    let userName;
+    let birth;
+    let location;
+    let email;
+    let profile;
 
-        User.create = jest.fn().mockResolvedValue(validUser);
-      });
+    beforeEach(() => {
+      id = 'TEST_USER_ID';
+      pw = 'TEST_USER_PASSWORD';
+      userName = 'TESTER';
+      birth = '1996-04-21';
+      location = 'SEOUL_KOREA';
+      email = 'test@email.com';
+      profile = 'TEST_PROFILE_FILE_PATH';
 
-      it('returns new user', async () => {
-        const user = await UserService.signUp(id, pw, userName, birth, location, email, profile);
-
-        expect(user).toEqual(validUser);
-      });
+      userRepo.signUp = jest.fn().mockResolvedValue(validUser);
     });
 
-    describe('with insufficient arguments', () => {
-      beforeEach(() => {
-        id;
-        pw = 'TEST_USER_PASSWORD';
-        userName = 'TESTER';
-        birth;
-        location = 'SEOUL_KOREA';
-        email = 'test@email.com';
-        profile = 'TEST_PROFILE_FILE_PATH';
+    it('returns new user', async () => {
+      const userInformation = { id, pw, userName, birth, location, email, profile };
+      const user = await userService.signUp(userInformation);
 
-        User.create = jest.fn().mockResolvedValue({
-          id: null,
-          pw: 'TEST_USER_PASSWORD',
-          userName: 'TESTER',
-          birth: null,
-          location: 'SEOUL_KOREA',
-          email: 'test@email.com',
-          profile: 'TEST_PROFILE_FILE_PATH',
-          friends: [],
-        });
-      });
-
-      it('returns error', async () => {
-        const user = await UserService.signUp();
-        const validation = user === validUser ? 'correct' : 'error';
-
-        expect(validation).toBe('error');
-      })
+      expect(user).toEqual(validUser);
     });
   });
 
@@ -111,15 +79,15 @@ describe('UserService', () => {
         }
       };
 
-      User.updateOne = jest.fn().mockResolvedValue({
+      userRepo.uploadProfileImage = jest.fn().mockResolvedValue({
         profile: 'TEST_PROFILE_PATH',
       });
     });
 
     it('returns uploaded profile path', async () => {
-      const user = await UserService.uploadProfileImage(req);
+      const user = await userService.uploadProfileImage(req);
 
-      expect(user.profile).toBe(req.body.filePath);
+      expect(user.profile).toEqual(req.body.filePath);
     });
   });
 
@@ -130,142 +98,106 @@ describe('UserService', () => {
           userID: 'TEST_SESSION_ID'
         }
       };
+
+      userRepo.findBySession = jest.fn().mockResolvedValue(validUser);
     });
 
-    describe('with matched session ID', () => {
-      beforeEach(() => {
-        User.findById = jest.fn().mockResolvedValue(validUser);
-      });
+    it('returns user matching session ID', async () => {
+      const user = await userService.findBySession(req);
 
-      it('returns user matching session ID', async () => {
-        const user = await UserService.findBySession(req);
-
-        expect(user).toBe(validUser);
-      });
-    });
-
-    describe('with unmatched session ID', () => {
-      beforeEach(() => {
-        User.findById = jest.fn().mockResolvedValue(null);
-      });
-
-      it('returns null', async () => {
-        const user = await UserService.findBySession(req);
-        expect(user).toBe(null);
-      });
+      expect(user).toEqual(validUser);
     });
   });
 
   describe('getUserById', () => {
+    let id;
 
-    describe('with matched user ID', () => {
-      beforeEach(() => {
-        id = 'TEST_USER_ID';
+    beforeEach(() => {
+      id = 'TEST_USER_ID';
 
-        User.findOne = jest.fn().mockResolvedValue(validUser);
-      });
-
-      it('returns user matching user ID', async () => {
-        const user = await UserService.getUserById(id);
-        expect(user).toBe(validUser);
-      });
+      userRepo.getUserById = jest.fn().mockResolvedValue(validUser);
     });
 
-    describe('with unmatched user ID', () => {
-      beforeEach(() => {
-        id = 'non-existent ID';
-
-        User.findOne = jest.fn().mockResolvedValue(null);
-      });
-
-      it('returns null', async () => {
-        const user = await UserService.getUserById(id);
-        expect(user).toBe(null);
-      });
+    it('returns user matching user ID', async () => {
+      const user = await userService.getUserById(id);
+      expect(user).toEqual(validUser);
     });
   });
 
   describe('onlineStatus', () => {
+    let id;
+
     describe('with online', () => {
       beforeEach(() => {
-        User.updateOne = jest.fn().mockResolvedValue({
+        userRepo.onlineStatus = jest.fn().mockResolvedValue({
           online: true,
         })
       });
 
       it('returns true', async () => {
-        const user = await UserService.onlineStatus(id, true);
-        expect(user.online).toBe(true);
+        const user = await userService.onlineStatus(id, true);
+
+        expect(user.online).toBeTruthy();
       });
     });
 
     describe('with offline', () => {
+      let id;
+
       beforeEach(() => {
-        User.updateOne = jest.fn().mockResolvedValue({
+        userRepo.onlineStatus = jest.fn().mockResolvedValue({
           online: false,
         })
       });
 
       it('returns false', async () => {
-        const user = await UserService.onlineStatus(id, false);
-        expect(user.online).toBe(false);
+        const user = await userService.onlineStatus(id, false);
+
+        expect(user.online).toBeFalsy();
       });
     });
   });
 
   describe('addFriend', () => {
+    let id;
     let friendID;
 
     beforeEach(() => {
       friendID = 'ADDED_FRIEND';
 
-      User.updateOne = jest.fn().mockResolvedValue({
+      userRepo.addFriend = jest.fn().mockResolvedValue({
         friends: [friendID],
       });
     });
 
     it('returns friend', async () => {
-      const user = await UserService.addFriend(id, friendID);
-      expect(user.friends.length).toBe(1);
+      const user = await userService.addFriend(id, friendID);
+
+      expect(user.friends).toHaveLength(1);
     });
   });
 
   describe('removeFriend', () => {
+    let id;
     let friendID;
     let friends;
+
     beforeEach(() => {
       friendID = 'REMOVED_FRIEND';
       friends = ['friend 1', 'friend 2', 'friend 3'];
 
-      User.updateOne = jest.fn().mockResolvedValue({
+      userRepo.removeFriend = jest.fn().mockResolvedValue({
         friends: ['friend 1', 'friend 2'],
       })
     });
 
     it('returns friends.length -1', async () => {
-      const user = await UserService.removeFriend(id, friendID);
-      expect(user.friends.length).toBe(friends.length -1);
+      const user = await userService.removeFriend(id, friendID);
+
+      expect(user.friends).toHaveLength(2);
     });
   });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
