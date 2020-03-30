@@ -65,3 +65,5 @@ if (process.env.NODE_ENV !== 'test') {
     console.log(`* socket.io is connected at port ${port}...`);
   });
 }
+
+module.exports = app;

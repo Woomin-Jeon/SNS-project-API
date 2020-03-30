@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
     res.send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
-    res.status(500).send({ message: 'Server error' });
+    res.status(500).send({ message: 'Server error: Cannot get all posts' });
   }
 });
 

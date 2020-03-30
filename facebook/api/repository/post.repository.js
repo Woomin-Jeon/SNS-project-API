@@ -26,7 +26,7 @@ const PostRepo = {
   },
 
   async removePost(uniqueKey) {
-    return await Post.deleteOne({ uniqueKey: uniqueKey});
+    return await Post.deleteOne({ uniqueKey: uniqueKey });
   },
 
   async editPost(uniqueKey, updatedContents) {

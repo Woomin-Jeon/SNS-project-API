@@ -11,6 +11,7 @@ const methods = {
       { $inc: { key: +1 } },
     );
     const key = await Key.findOne({ id: 'key' });
+
     return key.key;
   }
 };
