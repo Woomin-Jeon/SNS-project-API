@@ -1,5 +1,4 @@
 const userRepo = require('../repository/user.repository');
-const { validateUser } = require('../models/user');
 
 const userService = {
   async getAllUsers() {

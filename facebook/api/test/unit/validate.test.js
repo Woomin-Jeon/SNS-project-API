@@ -17,7 +17,7 @@ describe('vaildate features', () => {
       });
 
       it('returns true', () => {
-        const postInformation = { id, name, contents, profile }
+        const postInformation = { body : { id, name, contents, profile } }
         const validation = validatePost(postInformation);
 
         expect(validation).toBeTruthy();
@@ -38,7 +38,7 @@ describe('vaildate features', () => {
       });
 
       it('returns false', () => {
-        const postInformation = { id, name, contents, profile }
+        const postInformation = { body : { id, name, contents, profile } }
         const validation = validatePost(postInformation);
 
         expect(validation).toBeFalsy();
@@ -67,7 +67,7 @@ describe('vaildate features', () => {
       });
 
       it('returns true', () => {
-        const userInformation = { id, pw, userName, birth, location, email, profile };
+        const userInformation = { body : { id, pw, userName, birth, location, email, profile }};
         const validation = validateUser(userInformation);
 
         expect(validation).toBeTruthy();
@@ -94,7 +94,7 @@ describe('vaildate features', () => {
       });
 
       it('returns true', () => {
-        const userInformation = { id, pw, userName, birth, location, email, profile };
+        const userInformation = { body : { id, pw, userName, birth, location, email, profile } };
         const validation = validateUser(userInformation);
 
         expect(validation).toBeFalsy();

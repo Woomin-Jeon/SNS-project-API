@@ -1,40 +1,10 @@
-
+const request = require('supertest');
 const app = require('../../index');
 const PostRepo = require('../../repository/post.repository');
 const { testPostSchema } = require('../../models/x_test');
-const request = require('supertest');
 
-describe('posts', () => {
-  describe('GET /posts', () => {
-    let Post;
-
-    beforeEach(() => {
-      Post = new testPostSchema();
-      Post.id = 'TEST_ID';
-      Post.name = 'TEST_NAME';
-      Post.profile = 'TEST_PROFILE_PATH';
-      Post.contents = 'TEST_CONTENTS';
-      Post.save();
-
-      PostRepo.getAllPosts = jest.fn().mockImplementation(
-        async v => await testPostSchema.find()
-      );
-    });
-
-    afterEach(() => {
-      testPostSchema.collection.drop();
-    });
-
-    it('returns posts', async () => {
-      const res = await request(app).get('/posts');
-      const { timeLinePosts } = res.body;
-
-      expect(timeLinePosts).toHaveLength(1);
-      expect(res.status).toBe(200);
-    });
-  });
-
-  describe('POST /posts', () => {
+describe('/posts', () => {
+  describe('POST', () => {
     let id;
     let name;
     let contents;
@@ -51,8 +21,12 @@ describe('posts', () => {
         imagePath = 'POST_TEST_IMAGEPATH';
         time = ['POST_TEST_TIME'];
 
+        PostRepo.getAllPosts = jest.fn().mockImplementation(
+          async () => await testPostSchema.find()
+        );
+
         PostRepo.createPost = jest.fn().mockImplementation(
-          async v => await testPostSchema.create(
+          async () => await testPostSchema.create(
             {
               id, name, contents, profile, imagePath, time, uniqueKey: 999
             },
@@ -83,7 +57,7 @@ describe('posts', () => {
     });
   });
 
-  describe('PATCH /posts', () => {
+  describe('PATCH', () => {
     let updatedContents;
     let uniqueKey;
 
@@ -92,7 +66,7 @@ describe('posts', () => {
       uniqueKey = 999;
 
       PostRepo.editPost = jest.fn().mockImplementation(
-        async v => await testPostSchema.updateOne(
+        async () => await testPostSchema.updateOne(
           { uniqueKey: uniqueKey },
           { $set : { contents: updatedContents } },
         )
@@ -111,18 +85,37 @@ describe('posts', () => {
     });
   });
 
-  describe('DELETE /posts', () => {
+  describe('GET', () => {
+    beforeEach(() => {
+      PostRepo.getAllPosts = jest.fn().mockImplementation(
+        async () => await testPostSchema.find()
+      );
+    });
+
+    it('returns posts', async () => {
+      const res = await request(app).get('/posts');
+      const { timeLinePosts } = res.body;
+
+      expect(timeLinePosts).toHaveLength(1);
+      expect(res.status).toBe(200);
+    });
+  });
+
+  describe('DELETE', () => {
     beforeEach(() => {
       PostRepo.removePost = jest.fn().mockImplementation(
-        async v => await testPostSchema.deleteOne(
+        async () => await testPostSchema.deleteOne(
           { uniqueKey: 999 },
         )
       );
     });
 
+    afterEach(() => {
+      testPostSchema.collection.drop();
+    });
+
     it('returns posts except deleted post', async () => {
-      const res = await request(app)
-        .delete('/posts/:uniquekey');
+      const res = await request(app).delete('/posts/:uniquekey');
 
       const { timeLinePosts } = res.body;
 

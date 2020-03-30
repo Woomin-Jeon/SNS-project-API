@@ -13,7 +13,7 @@ const methods = {
     const key = await Key.findOne({ id: 'key' });
 
     return key.key;
-  }
+  },
 };
 
 module.exports = methods;

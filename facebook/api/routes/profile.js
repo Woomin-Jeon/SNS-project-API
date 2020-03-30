@@ -8,7 +8,8 @@ router.patch('/', async (req, res) => {
     const { userId, filePath } = req.body;
 
     await userService.uploadProfileImage(userId, filePath);
-    res.status(200).send();
+    const users = await userService.getAllUsers();
+    res.status(200).send({ userStore: users });
   } catch (err) {
     console.error(err);
     res.status(500).send({ message: 'Cannot upload profile image' });

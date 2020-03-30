@@ -3,14 +3,11 @@ const router = express.Router();
 const userService = require('../service/userService');
 const socketRepo = require('../utils/socket');
 const funcRepo = require('../utils/methods');
+const validate = require('../middleware/validate');
+const sessionValidator = require('../middleware/sessionValidator');
 
 // 로그인화면에서 이미 세션이 존재하는가
-router.get('/', async (req, res) => {
-  if (!req.session.userID) {
-    res.status(400).send({ message: 'Session not exist' });
-    return;
-  }
-
+router.get('/', validate(sessionValidator),async (req, res) => {
   try {
     const user = await userService.findBySession(req);
     res.send({ user });

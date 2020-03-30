@@ -17,8 +17,8 @@ const postSchema = new Schema({
 
 const Post = mongoose.model('post', postSchema);
 
-const validatePost = (postInformation) => {
-  const { id, name, contents, profile } = postInformation;
+const validatePost = (req) => {
+  const { id, name, contents, profile } = req.body;
 
   if (!id || !name || !contents || !profile) {
     return false;

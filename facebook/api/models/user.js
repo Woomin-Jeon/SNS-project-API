@@ -15,8 +15,8 @@ const userSchema = new Schema({
 
 const User = mongoose.model('user', userSchema);
 
-const validateUser = (userInformation) => {
-  const { id, pw, userName, birth, location, email, profile } = userInformation;
+const validateUser = (req) => {
+  const { id, pw, userName, birth, location, email, profile } = req.body;
 
   if (!id || !pw || !userName || !birth || !location || !email || !profile) {
     return false;
