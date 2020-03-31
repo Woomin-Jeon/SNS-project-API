@@ -4,22 +4,13 @@ const io = require('socket.io')(server);
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
-const mongoose = require('mongoose');
+const db = require('./models/index');
 
 const app = express();
 const port = 3000;
 const socketPort = 4000;
 
-const db = mongoose.connection;
-db.on('error', console.error);
-db.once('open', function(){
-  console.log("* Connected to mongoDB at port 27017...");
-});
-
-mongoose.connect('mongodb://localhost:27017/facebook', {
-  useUnifiedTopology: true,
-  useNewUrlParser: true,
-});
+db;
 
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:8080', credentials: true }));

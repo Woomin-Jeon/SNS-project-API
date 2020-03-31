@@ -4,10 +4,10 @@ const userService = require('../service/userService');
 const socketRepo = require('../utils/socket');
 const funcRepo = require('../utils/methods');
 const validate = require('../middleware/validate');
-const sessionValidator = require('../middleware/sessionValidator');
+const validator = require('../middleware/validators');
 
 // 로그인화면에서 이미 세션이 존재하는가
-router.get('/', validate(sessionValidator),async (req, res) => {
+router.get('/', validate(validator.sessionValidator), async (req, res) => {
   try {
     const user = await userService.findBySession(req);
     res.send({ user });
