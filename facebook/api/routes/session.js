@@ -10,7 +10,7 @@ const validator = require('../middleware/validators');
 router.get('/', validate.checker(validator.sessionValidator), async (req, res) => {
   try {
     const user = await userService.findBySession(req);
-    res.send({ user });
+    res.status(200).send({ user });
   } catch(err) {
     console.error(err);
     res.status(500).send({ message: 'Cannot register session to server' });
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
     const user = await userService.getUserById(userID);
 
     if (!funcRepo.checkPassword(user, userPW)) {
-      res.send({ status: 400, user: null });
+      res.status(400).send({ status: 400, user: null });
       return;
     }
 
