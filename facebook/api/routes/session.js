@@ -7,7 +7,7 @@ const validate = require('../middleware/validate');
 const validator = require('../middleware/validators');
 
 // 로그인화면에서 이미 세션이 존재하는가
-router.get('/', validate(validator.sessionValidator), async (req, res) => {
+router.get('/', validate.checker(validator.sessionValidator), async (req, res) => {
   try {
     const user = await userService.findBySession(req);
     res.send({ user });
@@ -23,8 +23,8 @@ router.post('/', async (req, res) => {
 
   try {
     const user = await userService.getUserById(userID);
-    const validation = funcRepo.checkPassword(user, userPW);
-    if (!validation) {
+
+    if (!funcRepo.checkPassword(user, userPW)) {
       res.send({ status: 400, user: null });
       return;
     }

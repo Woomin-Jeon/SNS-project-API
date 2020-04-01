@@ -8,7 +8,7 @@ const { validatePost } = require('../models/post');
 router.get('/', async (req, res) => {
   try {
     const posts = await postService.getAllPosts();
-    res.send({ timeLinePosts: posts });
+    res.status(200).send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
     res.status(500).send({ message: 'Server error: Cannot get all posts' });
@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // 게시글 등록
-router.post('/', validate(validatePost), async (req, res) => {
+router.post('/', validate.checker(validatePost), async (req, res) => {
   try {
     await postService.createPost(req.body);
     const posts = await postService.getAllPosts();
@@ -34,7 +34,7 @@ router.delete('/:uniquekey', async (req, res) => {
   try {
     await postService.removePost(uniquekey);
     const posts = await postService.getAllPosts();
-    res.send({ timeLinePosts: posts });
+    res.status(200).send({ timeLinePosts: posts });
   } catch(err) {
     console.error(err);
     res.status(500).send({ message: 'Server error' });

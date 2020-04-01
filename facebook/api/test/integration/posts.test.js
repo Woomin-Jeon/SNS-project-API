@@ -1,126 +1,193 @@
 const request = require('supertest');
 const app = require('../../index');
-const PostRepo = require('../../repository/post.repository');
-const { testPostSchema } = require('../../models/x_test');
+const db = require('../../models/index');
+const { Post } = require('../../models/post');
+const method = require('../../utils/methods');
 
-describe('/posts', () => {
-  describe('POST', () => {
-    let id;
-    let name;
-    let contents;
-    let profile;
-    let imagePath;
-    let time;
+describe('posts', () => {
+  describe('GET (getAllPosts)', () => {
+    beforeEach(async () => {
+      const postSchema1 = new Post();
+      postSchema1.id = 'TEST_POST_ID_1';
+      postSchema1.contents = 'TEST_POST_CONTENTS_1';
+      await postSchema1.save();
 
-    describe('with sufficient request arguments', () => {
+      const postSchema2 = new Post();
+      postSchema2.id = 'TEST_POST_ID_2';
+      postSchema2.contents = 'TEST_POST_CONTENTS_2';
+      await postSchema2.save();
+    });
+
+    afterEach(async () => {
+      await db.dropDatabase();
+    });
+
+    it('responds all posts', async () => {
+      const res = await request(app).get('/posts');
+      const { timeLinePosts } = res.body;
+
+      expect(timeLinePosts).toHaveLength(2);
+      expect(res.status).toBe(200);
+    });
+  });
+
+  describe('POST (createPost)', () => {
+    describe('with sufficient arguments', () => {
+      let id;
+      let name;
+      let contents;
+      let profile;
+
       beforeEach(() => {
-        id = 'POST_TEST_ID';
-        name = 'POST_TEST_NAME';
-        contents = 'POST_TEST_CONTENTS';
-        profile = 'POST_PROFILE';
-        imagePath = 'POST_TEST_IMAGEPATH';
-        time = ['POST_TEST_TIME'];
+        method.getKey = jest.fn().mockResolvedValue(999);
 
-        PostRepo.getAllPosts = jest.fn().mockImplementation(
-          async () => await testPostSchema.find()
-        );
-
-        PostRepo.createPost = jest.fn().mockImplementation(
-          async () => await testPostSchema.create(
-            {
-              id, name, contents, profile, imagePath, time, uniqueKey: 999
-            },
-          )
-        );
+        id = 'TEST_ID';
+        name = 'TEST_NAME';
+        contents = 'TEST_CONTENTS';
+        profile = 'TEST_PROFILE';
       });
 
-      it('returns posts', async () => {
-        const res = await request(app)
-          .post('/posts')
-          .send({ id, name, contents, profile, imagePath, time });
+      afterEach(async () => {
+        await db.dropDatabase();
+      });
 
+      it('responds posts with added one', async () => {
+        const res = await request(app).post('/posts')
+          .send({ id, name, contents, profile });
         const { timeLinePosts } = res.body;
 
         expect(timeLinePosts).toHaveLength(1);
         expect(res.status).toBe(200);
-      });
+      })
     });
 
-    describe('with insufficient request arguments', () => {
-      it('returns 400', async () => {
-        const res = await request(app)
-          .post('/posts')
-          .send();
+    describe('with insufficient arguments', () => {
+      let id;
+      let name;
+      let contents;
+      let profile;
+
+      beforeEach(() => {
+        method.getKey = jest.fn().mockResolvedValue(999);
+
+        id = 'TEST_ID';
+        name;
+        contents = 'TEST_CONTENTS';
+        profile = 'TEST_PROFILE';
+      });
+
+      afterEach(async () => {
+        await db.dropDatabase();
+      });
+
+      it('responds 400', async () => {
+        const res = await request(app).post('/posts')
+          .send({ id, name, contents, profile });
 
         expect(res.status).toBe(400);
       });
     });
   });
 
-  describe('PATCH', () => {
-    let updatedContents;
+  describe('DELETE (removePost)', () => {
+    describe('with matched uniqueKey', () => {
+      beforeEach(async () => {
+        const postSchema = new Post();
+        postSchema.uniqueKey = 999;
+        postSchema.contents = 'TEST_POST_CONTENTS';
+        await postSchema.save();
+      });
+
+      afterEach(async () => {
+        await db.dropDatabase();
+      });
+
+      it('responds posts without deleted one', async () => {
+        const res = await request(app).delete('/posts/999');
+        const { timeLinePosts } = res.body;
+
+        expect(timeLinePosts).toHaveLength(0);
+        expect(res.status).toBe(200);
+      });
+    });
+
+    describe('with unmatched uniqueKey', () => {
+      beforeEach(async () => {
+        const postSchema = new Post();
+        postSchema.uniqueKey = 123;
+        postSchema.contents = 'TEST_POST_CONTENTS';
+        await postSchema.save();
+      });
+
+      afterEach(async () => {
+        await db.dropDatabase();
+      });
+
+      it('responds posts with no change', async () => {
+        const res = await request(app).delete('/posts/999');
+        const { timeLinePosts } = res.body;
+
+        expect(timeLinePosts).toHaveLength(1);
+        expect(res.status).toBe(200);
+      });
+    });
+  });
+
+  describe('PATCH (editPost)', () => {
     let uniqueKey;
+    let updatedContents;
 
-    beforeEach(() => {
-      updatedContents = 'UPDATED_CONTENTS';
-      uniqueKey = 999;
+    describe('with matched uniqueKey', () => {
+      beforeEach(async () => {
+        uniqueKey = 999;
+        updatedContents = 'UPDATED_TEST_CONTENTS';
 
-      PostRepo.editPost = jest.fn().mockImplementation(
-        async () => await testPostSchema.updateOne(
-          { uniqueKey: uniqueKey },
-          { $set : { contents: updatedContents } },
-        )
-      );
+        const postSchema = new Post();
+        postSchema.uniqueKey = 999;
+        postSchema.contents = 'ORIGINAL_TEST_CONTENTS';
+        await postSchema.save();
+      });
+
+      afterEach(async () => {
+        await db.dropDatabase();
+      });
+
+      it('responds posts with updated one', async () => {
+        const res = await request(app).patch('/posts')
+          .send({ uniqueKey, updatedContents });
+
+        const { timeLinePosts } = res.body;
+
+        expect(timeLinePosts[0].contents).toBe(updatedContents);
+        expect(res.status).toBe(200);
+      });
     });
 
-    it('returns posts with updated post', async () => {
-      const res = await request(app)
-        .patch('/posts')
-        .send({ uniqueKey, updatedContents });
+    describe('with unmatched uniqueKey', () => {
+      beforeEach(async () => {
+        uniqueKey = 123;
+        updatedContents = 'UPDATED_TEST_CONTENTS';
 
-      const { timeLinePosts } = res.body;
+        const postSchema = new Post();
+        postSchema.uniqueKey = 999;
+        postSchema.contents = 'ORIGINAL_TEST_CONTENTS';
+        await postSchema.save();
+      });
 
-      expect(timeLinePosts[0].contents).toBe('UPDATED_CONTENTS');
-      expect(res.status).toBe(200);
-    });
-  });
+      afterEach(async () => {
+        await db.dropDatabase();
+      });
 
-  describe('GET', () => {
-    beforeEach(() => {
-      PostRepo.getAllPosts = jest.fn().mockImplementation(
-        async () => await testPostSchema.find()
-      );
-    });
+      it('responds posts with no change', async () => {
+        const res = await request(app).patch('/posts')
+          .send({ uniqueKey, updatedContents });
 
-    it('returns posts', async () => {
-      const res = await request(app).get('/posts');
-      const { timeLinePosts } = res.body;
+        const { timeLinePosts } = res.body;
 
-      expect(timeLinePosts).toHaveLength(1);
-      expect(res.status).toBe(200);
-    });
-  });
-
-  describe('DELETE', () => {
-    beforeEach(() => {
-      PostRepo.removePost = jest.fn().mockImplementation(
-        async () => await testPostSchema.deleteOne(
-          { uniqueKey: 999 },
-        )
-      );
-    });
-
-    afterEach(() => {
-      testPostSchema.collection.drop();
-    });
-
-    it('returns posts except deleted post', async () => {
-      const res = await request(app).delete('/posts/:uniquekey');
-
-      const { timeLinePosts } = res.body;
-
-      expect(timeLinePosts).toHaveLength(0);
-      expect(res.status).toBe(200);
+        expect(timeLinePosts[0].contents).toBe('ORIGINAL_TEST_CONTENTS');
+        expect(res.status).toBe(200);
+      });
     });
   });
 });
+

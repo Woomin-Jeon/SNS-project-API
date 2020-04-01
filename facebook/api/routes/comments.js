@@ -6,7 +6,7 @@ const postService = require('../service/postService');
 // GET 댓글 목록
 router.get('/', async (req, res) => {
   const comments = await commentService.getAllComments();
-  res.send({ postComments: comments });
+  res.status(200).send({ postComments: comments });
 });
 
 // 댓글 추가

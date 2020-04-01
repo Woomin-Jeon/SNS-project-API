@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
 dotenv.config();
-const selectDB = process.env.DB_PRODUCT;
+
+const selectDB = process.env.NODE_ENV === 'test'
+  ? process.env.DB_TEST
+  : process.env.DB_PRODUCT;
 
 const db = mongoose.connection;
 db.on('error', console.error);
