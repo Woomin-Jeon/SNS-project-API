@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // 회원가입
-router.post('/', vaildate.checker(validateUser), async (req, res) => {
+router.post('/', vaildate(validateUser), async (req, res) => {
   try {
     await userService.signUp(req.body);
     res.status(200).send();

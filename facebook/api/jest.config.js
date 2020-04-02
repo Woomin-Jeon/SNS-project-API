@@ -1,3 +1,6 @@
 module.exports = {
-  testEnvironment: 'node'
+  testEnvironment: 'node',
+  restoreMocks: true,
+  clearMocks: true,
+  resetMocks: true
 };

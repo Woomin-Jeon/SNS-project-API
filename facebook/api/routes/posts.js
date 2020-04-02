@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 });
 
 // 게시글 등록
-router.post('/', validate.checker(validatePost), async (req, res) => {
+router.post('/', validate(validatePost), async (req, res) => {
   try {
     await postService.createPost(req.body);
     const posts = await postService.getAllPosts();
@@ -46,7 +46,7 @@ router.patch('/', async (req, res) => {
   const { uniqueKey, updatedContents } = req.body;
 
   try {
-    await postService.editPost(uniqueKey, updatedContents);
+    await postService.editPost(uniqueKey, updatedContents, res);
     const posts = await postService.getAllPosts();
     res.send({ timeLinePosts: posts });
   } catch (err) {

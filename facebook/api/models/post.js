@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Joi = require('@hapi/joi');
 
 const postSchema = new Schema({
   uniqueKey: Number,
@@ -18,13 +19,14 @@ const postSchema = new Schema({
 const Post = mongoose.model('post', postSchema);
 
 const validatePost = (req) => {
-  const { id, name, contents, profile } = req.body;
+  const schema = Joi.object({
+    id: Joi.required(),
+    name: Joi.required(),
+    contents: Joi.required(),
+    profile: Joi.required(),
+  });
 
-  if (!id || !name || !contents || !profile) {
-    return false;
-  }
-
-  return true;
+  return Joi.validate(req.body, schema);
 };
 
 exports.validatePost = validatePost;

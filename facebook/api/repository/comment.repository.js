@@ -1,7 +1,7 @@
 const Method = require('../utils/methods');
 const Comment = require('../models/comment');
 
-const CommentRepo = {
+const commentRepo = {
   async getAllComments() {
     return await Comment.find();
   },
@@ -41,4 +41,4 @@ const CommentRepo = {
   }
 };
 
-module.exports = CommentRepo;
+module.exports = commentRepo;

@@ -1,6 +1,6 @@
 const { User } = require('../models/user');
 
-const UserRepo = {
+const userRepo = {
   async getAllUsers() {
     return await User.find();
   },
@@ -50,6 +50,6 @@ const UserRepo = {
   }
 };
 
-module.exports = UserRepo;
+module.exports = userRepo;
 
 

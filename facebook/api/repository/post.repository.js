@@ -1,7 +1,7 @@
 const Method = require('../utils/methods');
 const { Post } = require('../models/post');
 
-const PostRepo = {
+const postRepo = {
   async getAllPosts() {
     return await Post.find();
   },
@@ -51,4 +51,4 @@ const PostRepo = {
   }
 };
 
-module.exports = PostRepo;
+module.exports = postRepo;

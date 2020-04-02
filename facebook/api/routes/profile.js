@@ -12,7 +12,7 @@ router.patch('/', async (req, res) => {
     res.status(200).send({ userStore: users });
   } catch (err) {
     console.error(err);
-    res.status(500).send({ message: 'Cannot upload profile image' });
+    res.status(500).send({ message: 'Server Error: Cannot upload profile image' });
   }
 });
 

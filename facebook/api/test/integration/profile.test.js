@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../../index');
 const db = require('../../models/index');
+const userRepo = require('../../repository/user.repository');
 
 describe('/profile', () => {
   describe('PATCH (uploadProfileImage)', () => {
@@ -21,6 +22,19 @@ describe('/profile', () => {
         .send({ userId, filePath });
 
       expect(res.status).toBe(200);
+    });
+
+    describe('with server error', () => {
+      beforeEach(() => {
+        userRepo.uploadProfileImage = jest.fn().mockRejectedValue('Test(server error)');
+      });
+
+      it('responds 500', async () => {
+        const res = await request(app).patch('/profile')
+          .send({ userId, filePath });
+
+        expect(res.status).toBe(500);
+      });
     });
   });
 });
