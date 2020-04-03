@@ -1,31 +1,47 @@
-const socketFunc = require('../../utils/socket');
+const { socket, socketIdStore } = require('../../utils/socket');
 
 describe('socketFunc', () => {
-  let id;
-  let socket;
+  let existentID;
+  let socketID;
+  let nonExistentID;
 
   beforeEach(() => {
-    id = 'TEST_ID';
-    socket = 'SOCKET_ID';
+    existentID = 'TEST_ID';
+    socketID = 'SOCKET_ID';
+    nonExistentID = 'WHATEVER';
   });
 
   describe('registerSocket', () => {
-    describe('with \'socket ID\' from \'user ID\' is correct', () => {
-      it('returns socket ID', () => {
-        socketFunc.registerSocket(id, socket);
-        const validation = socketFunc.findByUserID(id);
-        expect(validation).toBe(socket);
+    it('add socket ID to socketIdStore', () => {
+      socket.registerSocket(existentID, socketID);
+
+      expect(socketIdStore).toHaveLength(1);
+    });
+  });
+
+  describe('findByUserID', () => {
+    describe('with existent user ID', () => {
+      it('returns socket ID that matches the user ID', () => {
+        const socketID = socket.findByUserID(existentID);
+
+        expect(socketID).toBe('SOCKET_ID');
+      });
+    });
+
+    describe('with non-existent user ID', () => {
+      it('returns null', () => {
+        const socketID = socket.findByUserID(nonExistentID);
+
+        expect(socketID).toBeNull();
       });
     });
   });
 
   describe('unregisterSocket', () => {
-    describe('with \'socket ID\' from \'user ID\' is null', () => {
-      it('returns null', () => {
-        socketFunc.unregisterSocket(id);
-        const validation = socketFunc.findByUserID(id);
-        expect(validation).toBe(null);
-      });
+    it('remove socket ID from socketIdStore', () => {
+      socket.unregisterSocket(existentID);
+
+      expect(socketIdStore).toHaveLength(0);
     });
   });
 });

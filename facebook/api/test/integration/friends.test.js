@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../index');
 const db = require('../../models/index');
 const { User } = require('../../models/user');
+const userRepo = require('../../repository/user.repository');
 
 if (process.env.NODE_ENV === 'test') {
   describe('/friends', () => {
@@ -31,6 +32,19 @@ if (process.env.NODE_ENV === 'test') {
         expect(userStore[0].friends).toHaveLength(1);
         expect(res.status).toBe(200);
       });
+
+      describe('with server error', () => {
+        beforeEach(() => {
+          userRepo.addFriend = jest.fn().mockRejectedValue('Test(server error)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).post('/friends')
+            .send({currentUserID, friendID});
+
+          expect(res.status).toBe(500);
+        });
+      });
     });
 
     describe('PATCH (removeFriend)', () => {
@@ -58,6 +72,19 @@ if (process.env.NODE_ENV === 'test') {
 
         expect(userStore[0].friends).toHaveLength(0);
         expect(res.status).toBe(200);
+      });
+
+      describe('with server error', () => {
+        beforeEach(() => {
+          userRepo.removeFriend = jest.fn().mockRejectedValue('Test(server error)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).patch('/friends')
+            .send({currentUserID, friendID});
+
+          expect(res.status).toBe(500);
+        });
       });
     });
   });

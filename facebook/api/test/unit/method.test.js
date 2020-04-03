@@ -1,4 +1,5 @@
 const method = require('../../utils/methods');
+const Key = require('../../models/key');
 
 describe('method', () => {
   describe('checkPassword', () => {
@@ -12,6 +13,7 @@ describe('method', () => {
 
       it('returns true', () => {
         const validation = method.checkPassword(user, pw);
+
         expect(validation).toBe(true);
       });
     });
@@ -23,8 +25,9 @@ describe('method', () => {
 
       it('returns false', () => {
         const validation = method.checkPassword(user, pw);
+
         expect(validation).toBe(false);
       });
-    })
+    });
   });
 });

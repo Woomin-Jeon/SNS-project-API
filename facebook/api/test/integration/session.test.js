@@ -2,21 +2,107 @@ const request = require('supertest');
 const app = require('../../index');
 const db = require('../../models/index');
 const { User } = require('../../models/user');
+const userRepo = require('../../repository/user.repository');
+const { socket } = require('../../utils/socket');
 
 if (process.env.NODE_ENV === 'test') {
   describe('/session', () => {
+    describe('GET', () => {
+      describe('with session', () => {
+        let userID;
+        let userPW;
+        let socketID;
+
+        let cookie;
+
+        beforeEach(async () => {
+          const userSchema = new User();
+          userSchema.id = 'TEST_USER_ID';
+          userSchema.pw = 'TEST_USER_PASSWORD';
+          await userSchema.save();
+
+          userID = 'TEST_USER_ID';
+          userPW = 'TEST_USER_PASSWORD';
+          socketID = 'TEST_SOCKET_ID';
+
+          await request(app)
+            .post('/session')
+            .send({ userID, userPW, socketID })
+            .expect(200)
+            .then((res) => {
+              cookie = res.header['set-cookie'][0];
+            });
+        });
+
+        afterEach(async () => {
+          await db.dropDatabase();
+        });
+
+        it('responds user', async () => {
+          const res = await request(app).get('/session')
+            .set('Cookie', cookie);
+          const { user } = res.body;
+
+          expect(user.id).toBe(userID);
+          expect(res.status).toBe(200);
+        });
+      });
+
+      describe('with no session', () => {
+        it('responds validator error', async () => {
+          const res = await request(app).get('/session');
+
+          expect(res.status).toBe(400);
+        });
+      });
+
+      describe('with server error', () => {
+        let userID;
+        let userPW;
+        let socketID;
+
+        let cookie;
+
+        beforeEach(async () => {
+          const userSchema = new User();
+          userSchema.id = 'TEST_USER_ID';
+          userSchema.pw = 'TEST_USER_PASSWORD';
+          await userSchema.save();
+
+          userID = 'TEST_USER_ID';
+          userPW = 'TEST_USER_PASSWORD';
+          socketID = 'TEST_SOCKET_ID';
+
+          await request(app)
+            .post('/session')
+            .send({ userID, userPW, socketID })
+            .expect(200)
+            .then((res) => {
+              cookie = res.header['set-cookie'][0];
+            });
+
+          userRepo.findBySession = jest.fn().mockRejectedValue('Test(server error)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).get('/session')
+            .set('Cookie', cookie);
+
+          expect(res.status).toBe(500);
+        });
+      });
+    });
+
     describe('POST', () => {
       describe('with vaild id & password', () => {
         let userID;
         let userPW;
         let socketID;
-        let temptSession;
 
         beforeEach(async () => {
           userID = 'TEST_USER_ID';
           userPW = 'TEST_USER_PASSWORD';
           socketID = 'TEST_SOCKET_ID';
-          temptSession = 'SESSION_ID';
 
           const userSchema = new User();
           userSchema.id = 'TEST_USER_ID';
@@ -68,54 +154,30 @@ if (process.env.NODE_ENV === 'test') {
           expect(res.status).toBe(400);
         });
       });
-    });
 
-    describe('GET', () => {
-      describe('with session', () => {
+      describe('with server error', () => {
         let userID;
         let userPW;
         let socketID;
 
-        let cookie;
-
         beforeEach(async () => {
+          userID = 'TEST_USER_ID';
+          userPW = 'TEST_USER_PASSWORD';
+          socketID = 'TEST_SOCKET_ID';
+
           const userSchema = new User();
           userSchema.id = 'TEST_USER_ID';
           userSchema.pw = 'TEST_USER_PASSWORD';
           await userSchema.save();
 
-          userID = 'TEST_USER_ID';
-          userPW = 'TEST_USER_PASSWORD';
-          socketID = 'TEST_SOCKET_ID';
-
-          await request(app)
-            .post('/session')
-            .send({ userID, userPW, socketID })
-            .expect(200)
-            .then((res) => {
-              cookie = res.header['set-cookie'][0];
-            });
+          userRepo.onlineStatus = jest.fn().mockRejectedValue('Test(server error)');
         });
 
-        afterEach(async () => {
-          await db.dropDatabase();
-        });
+        it('responds 500', async () => {
+          const res = await request(app).post('/session')
+            .send({ userID, userPW, socketID });
 
-        it('responds user', async () => {
-          const res = await request(app).get('/session')
-            .set('Cookie', cookie);
-          const { user } = res.body;
-
-          expect(user.id).toBe(userID);
-          expect(res.status).toBe(200);
-        });
-      });
-
-      describe('with no session', () => {
-        it('responds validator error', async () => {
-          const res = await request(app).get('/session');
-
-          expect(res.status).toBe(400);
+          expect(res.status).toBe(500);
         });
       });
     });
@@ -151,13 +213,22 @@ if (process.env.NODE_ENV === 'test') {
       });
 
       it('makes session destroyed', async () => {
-        const res1 = await request(app).get('/session')
-          .set('Cookie', cookie);
-        expect(res1.body.user).toBeDefined();
-
-        const res2 = await request(app).patch('/session')
+        const res = await request(app).patch('/session')
           .send({ userID });
-        expect(res2.body.user).toBeUndefined();
+        expect(res.body.user).toBeUndefined();
+      });
+
+      describe('with server error', () => {
+        beforeEach(() => {
+          userRepo.onlineStatus = jest.fn().mockRejectedValue('Test(server error)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).patch('/session')
+            .send({ userID });
+
+          expect(res.status).toBe(500);
+        });
       });
     });
   });

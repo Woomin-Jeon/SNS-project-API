@@ -9,6 +9,7 @@ router.patch('/', async (req, res) => {
   try {
     await commentService.like(uniqueKey, currentUserID);
     const comments = await commentService.getAllComments();
+
     res.send({ postComments: comments });
   } catch(err) {
     console.error(err);

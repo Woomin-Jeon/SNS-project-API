@@ -3,35 +3,10 @@ const app = require('../../index');
 const db = require('../../models/index');
 const { Post } = require('../../models/post');
 const method = require('../../utils/methods');
+const postRepo = require('../../repository/post.repository');
 
 if (process.env.NODE_ENV === 'test') {
   describe('posts', () => {
-    describe('GET (getAllPosts)', () => {
-      beforeEach(async () => {
-        const postSchema1 = new Post();
-        postSchema1.id = 'TEST_POST_ID_1';
-        postSchema1.contents = 'TEST_POST_CONTENTS_1';
-        await postSchema1.save();
-
-        const postSchema2 = new Post();
-        postSchema2.id = 'TEST_POST_ID_2';
-        postSchema2.contents = 'TEST_POST_CONTENTS_2';
-        await postSchema2.save();
-      });
-
-      afterEach(async () => {
-        await db.dropDatabase();
-      });
-
-      it('responds all posts', async () => {
-        const res = await request(app).get('/posts');
-        const { timeLinePosts } = res.body;
-
-        expect(timeLinePosts).toHaveLength(2);
-        expect(res.status).toBe(200);
-      });
-    });
-
     describe('POST (createPost)', () => {
       describe('with vaild arguments', () => {
         let id;
@@ -88,6 +63,29 @@ if (process.env.NODE_ENV === 'test') {
           expect(res.status).toBe(400);
         });
       });
+
+      describe('with server error', () => {
+        let id;
+        let name;
+        let contents;
+        let profile;
+
+        beforeEach(() => {
+          id = 'TEST_ID';
+          name = 'TEST_NAME';
+          contents = 'TEST_CONTENTS';
+          profile = 'TEST_PROFILE';
+
+          postRepo.createPost = jest.fn().mockRejectedValue('Test(serverError)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).post('/posts')
+            .send({ id, name, contents, profile });
+
+          expect(res.status).toBe(500);
+        });
+      });
     });
 
     describe('DELETE (removePost)', () => {
@@ -130,6 +128,18 @@ if (process.env.NODE_ENV === 'test') {
 
           expect(timeLinePosts).toHaveLength(1);
           expect(res.status).toBe(200);
+        });
+      });
+
+      describe('with server error', () => {
+        beforeEach(() => {
+          postRepo.removePost = jest.fn().mockRejectedValue('Test(serverError)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).delete('/posts/999');
+
+          expect(res.status).toBe(500);
         });
       });
     });
@@ -186,6 +196,57 @@ if (process.env.NODE_ENV === 'test') {
 
           expect(timeLinePosts[0].contents).toBe('ORIGINAL_TEST_CONTENTS');
           expect(res.status).toBe(200);
+        });
+      });
+
+      describe('with server error', () => {
+        beforeEach(() => {
+          postRepo.editPost = jest.fn().mockRejectedValue('Test(serverError)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).patch('/posts')
+            .send({uniqueKey, updatedContents});
+
+          expect(res.status).toBe(500);
+        });
+      });
+    });
+
+    describe('GET (getAllPosts)', () => {
+      beforeEach(async () => {
+        const postSchema1 = new Post();
+        postSchema1.id = 'TEST_POST_ID_1';
+        postSchema1.contents = 'TEST_POST_CONTENTS_1';
+        await postSchema1.save();
+
+        const postSchema2 = new Post();
+        postSchema2.id = 'TEST_POST_ID_2';
+        postSchema2.contents = 'TEST_POST_CONTENTS_2';
+        await postSchema2.save();
+      });
+
+      afterEach(async () => {
+        await db.dropDatabase();
+      });
+
+      it('responds all posts', async () => {
+        const res = await request(app).get('/posts');
+        const { timeLinePosts } = res.body;
+
+        expect(timeLinePosts).toHaveLength(2);
+        expect(res.status).toBe(200);
+      });
+
+      describe('with server error', () => {
+        beforeEach(() => {
+          postRepo.getAllPosts = jest.fn().mockRejectedValue('Test(serverError)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).get('/posts');
+
+          expect(res.status).toBe(500);
         });
       });
     });

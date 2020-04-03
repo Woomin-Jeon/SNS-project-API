@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../index');
 const db = require('../../models/index');
 const { Post } = require('../../models/post');
+const postRepo = require('../../repository/post.repository');
 
 if (process.env.NODE_ENV === 'test') {
   describe('/like', () => {
@@ -30,6 +31,19 @@ if (process.env.NODE_ENV === 'test') {
 
         expect(timeLinePosts[0].thumbCount).toHaveLength(1);
         expect(res.status).toBe(200);
+      });
+
+      describe('with server error', () => {
+        beforeEach(() => {
+          postRepo.like = jest.fn().mockRejectedValue('Test(server error)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).patch('/like')
+            .send({uniqueKey, currentUserID});
+
+          expect(res.status).toBe(500);
+        });
       });
     });
   });

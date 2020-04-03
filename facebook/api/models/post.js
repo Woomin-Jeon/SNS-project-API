@@ -23,8 +23,7 @@ const validatePost = (req) => {
     id: Joi.required(),
     name: Joi.required(),
     contents: Joi.required(),
-    profile: Joi.required(),
-  });
+  }).unknown();
 
   return Joi.validate(req.body, schema);
 };

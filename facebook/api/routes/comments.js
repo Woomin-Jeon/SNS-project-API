@@ -5,8 +5,13 @@ const postService = require('../service/postService');
 
 // GET 댓글 목록
 router.get('/', async (req, res) => {
-  const comments = await commentService.getAllComments();
-  res.status(200).send({ postComments: comments });
+  try {
+    const comments = await commentService.getAllComments();
+    res.status(200).send({ postComments: comments });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Server error' });
+  }
 });
 
 // 댓글 추가
@@ -27,9 +32,14 @@ router.post('/', async (req, res) => {
 router.patch('/', async (req, res) => {
   const { uniqueKey } = req.body;
 
-  await postService.plusCommentCount(uniqueKey);
-  const posts = await postService.getAllPosts();
-  res.send({ timeLinePosts: posts });
+  try {
+    await postService.plusCommentCount(uniqueKey);
+    const posts = await postService.getAllPosts();
+    res.send({ timeLinePosts: posts });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: 'Server error' });
+  }
 });
 
 module.exports = router;

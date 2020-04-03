@@ -20,9 +20,11 @@ router.post('/', validate(validatePost), async (req, res) => {
   try {
     await postService.createPost(req.body);
     const posts = await postService.getAllPosts();
+
     res.status(200).send({ timeLinePosts: posts });
   } catch (err) {
     console.error(err);
+
     res.status(500).send({ message: 'Server error' });
   }
 });

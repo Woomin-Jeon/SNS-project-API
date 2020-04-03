@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../../index');
 const { User } = require('../../models/user');
 const db = require('../../models/index');
+const userRepo = require('../../repository/user.repository');
 
 if (process.env.NODE_ENV === 'test') {
   describe('/login', () => {
@@ -28,6 +29,18 @@ if (process.env.NODE_ENV === 'test') {
 
         expect(userStore).toHaveLength(2);
         expect(res.status).toBe(200);
+      });
+
+      describe('with server error', () => {
+        beforeEach(() => {
+          userRepo.getAllUsers = jest.fn().mockRejectedValue('Test(server error)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).get('/login');
+
+          expect(res.status).toBe(500);
+        });
       });
     });
 
@@ -91,6 +104,35 @@ if (process.env.NODE_ENV === 'test') {
             .send({id, pw, userName, birth, location, email, profile});
 
           expect(res.status).toBe(400);
+        });
+      });
+
+      describe('with server error', () => {
+        let id;
+        let pw;
+        let userName;
+        let birth;
+        let location;
+        let email;
+        let profile;
+
+        beforeEach(() => {
+          id = 'TEST_ID';
+          pw = 'TEST_PASSWORD';
+          userName = 'TEST_NAME';
+          birth = 'YYYY-MM-DD';
+          location = 'TEST_LOCATION';
+          email = 'TEST_EMAIL';
+          profile = 'TEST_PROFILE';
+
+          userRepo.signUp = jest.fn().mockRejectedValue('Test(server error)');
+        });
+
+        it('responds 500', async () => {
+          const res = await request(app).post('/login')
+            .send({id, pw, userName, birth, location, email, profile});
+
+          expect(res.status).toBe(500);
         });
       });
     });

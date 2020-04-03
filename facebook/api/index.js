@@ -1,14 +1,12 @@
 const express = require('express');
-const server = require('http').createServer(express);
-const io = require('socket.io')(server);
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const db = require('./models/index');
+const io = require('./socketio/socketio');
 
 const app = express();
 const port = 3000;
-const socketPort = 4000;
 
 db;
 
@@ -22,17 +20,7 @@ app.use(session({
   cookie: {},
 }));
 
-// socket.io 연결
-io.on('connection', (socket) => {
-  socket.on('chat message', function(msg){
-    const { message, userSocketID, userID } = msg;
-
-    io.to(userSocketID).emit('hello', { userID, message });
-  });
-
-  socket.on('disconnect', function(){
-  });
-});
+io;
 
 app.use('/socket', require('./routes/socket'));
 app.use('/profile', require('./routes/profile'));
@@ -41,7 +29,6 @@ app.use('/session', require('./routes/session'));
 app.use('/login', require('./routes/login'));
 app.use('/friends', require('./routes/friends'));
 app.use('/posts', require('./routes/posts'));
-app.use('/scraps', require('./unuse/scraps'));
 app.use('/comments', require('./routes/comments'));
 app.use('/childcomments', require('./routes/childcomments'));
 app.use('/like', require('./routes/like'));
@@ -50,10 +37,6 @@ app.use('/commentlike', require('./routes/commentlike'));
 if (process.env.NODE_ENV !== 'test') {
   app.listen(port, () => {
     console.log(`* Server is running at port ${port}...`);
-  });
-
-  server.listen(socketPort, () => {
-    console.log(`* socket.io is connected at port ${port}...`);
   });
 }
 

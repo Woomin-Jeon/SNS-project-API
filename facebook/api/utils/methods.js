@@ -8,12 +8,12 @@ const methods = {
   async getKey() {
     await Key.updateOne(
       { id: 'key' },
-      { $inc: { key: +1 } },
+      { $inc: { key: + 1 } },
     );
-    const key = await Key.findOne({ id: 'key' });
 
-    return key.key;
-  },
+    const key =  await Key.find();
+    return key[0].key;
+  }
 };
 
 module.exports = methods;

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userService = require('../service/userService');
-const socketRepo = require('../utils/socket');
+const { socket } = require('../utils/socket');
 const funcRepo = require('../utils/methods');
 const validate = require('../middleware/validate');
 const validateSession = require('../middleware/validateSession');
@@ -10,9 +10,11 @@ const validateSession = require('../middleware/validateSession');
 router.get('/', validate(validateSession), async (req, res) => {
   try {
     const user = await userService.findBySession(req);
+
     res.status(200).send({ user });
-  } catch(err) {
+  } catch (err) {
     console.error(err);
+
     res.status(500).send({ message: 'Cannot register session to server' });
   }
 });
@@ -29,7 +31,7 @@ router.post('/', async (req, res) => {
       return;
     }
 
-    socketRepo.registerSocket(userID, socketID);
+    socket.registerSocket(userID, socketID);
 
     await userService.onlineStatus(userID, true);
 
@@ -37,6 +39,7 @@ router.post('/', async (req, res) => {
     res.send({ user });
   } catch(err) {
     console.error(err);
+
     res.status(500).send({ message: 'Server error' });
   }
 });
@@ -46,12 +49,15 @@ router.patch('/', async (req, res) => {
   const { userID } = req.body;
 
   try {
-    socketRepo.unregisterSocket(userID);
+    socket.unregisterSocket(userID);
     await userService.onlineStatus(userID, false);
     req.session.destroy();
+
     res.status(200).send();
   } catch (err) {
     console.error(err);
+
+    res.status(500).send({ message: 'Server error' });
   }
 });
 

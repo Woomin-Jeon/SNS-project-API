@@ -17,7 +17,7 @@ describe('vaildate features', () => {
       });
 
       it('returns null', () => {
-        const postInformation = { body : { id: 's', name, contents, profile } }
+        const postInformation = { body : { id, name, contents, profile } }
         const validation = validatePost(postInformation);
 
         expect(validation.error).toBeNull();
@@ -102,5 +102,3 @@ describe('vaildate features', () => {
     });
   });
 });
-
-
