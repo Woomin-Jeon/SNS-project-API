@@ -13,8 +13,9 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(socketPort, () => {
-  console.log(`* socket.io is connected at port ${port}...`);
-});
-
+if (process.env.NODE_ENV !== 'test') {
+  server.listen(socketPort, () => {
+    console.log(`* socket.io is connected at port ${port}...`);
+  });
+}
 module.exports = io;
