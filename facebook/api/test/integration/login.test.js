@@ -1,7 +1,7 @@
 const request = require('supertest');
-const app = require('../../index');
+const app = require('../../app');
 const { User } = require('../../models/user');
-const db = require('../../models/index');
+const db = require('../../models/test_db');
 const userRepo = require('../../repository/user.repository');
 
 if (process.env.NODE_ENV === 'test') {

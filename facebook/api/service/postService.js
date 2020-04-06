@@ -1,3 +1,4 @@
+require('express-async-errors');
 const postRepo = require('../repository/post.repository');
 
 const postService = {

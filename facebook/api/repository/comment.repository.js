@@ -1,3 +1,4 @@
+require('express-async-errors');
 const Method = require('../utils/methods');
 const Comment = require('../models/comment');
 

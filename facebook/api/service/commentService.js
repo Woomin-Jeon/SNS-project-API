@@ -1,3 +1,4 @@
+require('express-async-errors');
 const commentRepo = require('../repository/comment.repository');
 
 const commentService = {

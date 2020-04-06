@@ -1,4 +1,4 @@
-const db = require('../../models/index');
+const db = require('../../models/test_db');
 const methods = require('../../utils/methods');
 const Key = require('../../models/key');
 

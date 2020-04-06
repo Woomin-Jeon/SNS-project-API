@@ -1,3 +1,4 @@
+require('express-async-errors');
 const { User } = require('../models/user');
 
 const userRepo = {

@@ -3,28 +3,21 @@ const router = express.Router();
 const userService = require('../service/userService');
 const vaildate = require('../middleware/validate');
 const { validateUser } = require('../models/user');
+const wrapAsync = require('../middleware/wrapAsync');
 
 // GET 유저 목록
-router.get('/', async (req, res) => {
-  try {
-    const users = await userService.getAllUsers();
-    res.send({ userStore: users });
-  } catch(err) {
-    console.error(err);
-    res.status(500).send({ message: 'Server error' });
-  }
-});
+router.get('/', wrapAsync(async (req, res) => {
+  const users = await userService.getAllUsers();
+
+  res.send({ userStore: users });
+}));
 
 // 회원가입
-router.post('/', vaildate(validateUser), async (req, res) => {
-  try {
-    await userService.signUp(req.body);
-    res.status(200).send();
-  } catch (err){
-    console.error(err);
-    res.status(500).send({ message: 'Server error' });
-  }
-});
+router.post('/', vaildate(validateUser), wrapAsync(async (req, res) => {
+  await userService.signUp(req.body);
+
+  res.status(200).send();
+}));
 
 module.exports = router;
 

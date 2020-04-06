@@ -6,10 +6,10 @@ dotenv.config();
 const db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', function(){
-  console.log("* Connecting the mongoDB at port 27017...");
+  console.log("* Connecting the Test MongoDB...");
 });
 
-mongoose.connect(process.env.DB_PRODUCT, {
+mongoose.connect(process.env.DB_TEST, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });

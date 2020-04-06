@@ -1,6 +1,6 @@
 const request = require('supertest');
-const app = require('../../index');
-const db = require('../../models/index');
+const app = require('../../app');
+const db = require('../../models/test_db');
 const { Post } = require('../../models/post');
 const postRepo = require('../../repository/post.repository');
 

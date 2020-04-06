@@ -1,3 +1,4 @@
+require('express-async-errors');
 const userRepo = require('../repository/user.repository');
 
 const userService = {

@@ -26,5 +26,9 @@ app.use('/comments', require('./routes/comments'));
 app.use('/childcomments', require('./routes/childcomments'));
 app.use('/like', require('./routes/like'));
 app.use('/commentlike', require('./routes/commentlike'));
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send('Server error!');
+});
 
 module.exports = app;
