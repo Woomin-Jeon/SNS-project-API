@@ -3,8 +3,14 @@ const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const logger = require('./logs/winston');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
+
+const Sentry = require('@sentry/node');
+Sentry.init({ dsn: process.env.SENTRY_DSN });
 
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:8080', credentials: true }));

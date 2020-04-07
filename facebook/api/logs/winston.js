@@ -5,11 +5,11 @@ const logger = winston.createLogger({
     new winston.transports.Console({
       level: 'debug',
       format: winston.format.combine(
-        winston.format.label({ label: 'notion' }),
+        winston.format.label({ label: '>' }),
         winston.format.colorize({ all: true }),
         winston.format.timestamp(),
         winston.format.printf(({ message, label }) => {
-          return `[${label}] ${message}`;
+          return `${label} ${message}`;
         }),
       )
     }),
