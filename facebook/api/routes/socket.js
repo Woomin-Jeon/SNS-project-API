@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { socket } = require('../utils/socket');
+const { socket } = require('../socketio/socket');
 
 // GET socket.id
 router.get('/:userid', (req, res) => {

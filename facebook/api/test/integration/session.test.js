@@ -3,7 +3,7 @@ const app = require('../../app');
 const db = require('../../models/test_db');
 const { User } = require('../../models/user');
 const userRepo = require('../../repository/user.repository');
-const { socket } = require('../../utils/socket');
+const { socket } = require('../../socketio/socket');
 
 if (process.env.NODE_ENV === 'test') {
   describe('/session', () => {

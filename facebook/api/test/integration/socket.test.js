@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../../app');
-const { socketIdStore } = require('../../utils/socket');
+const { socketIdStore } = require('../../socketio/socket');
 
 describe('/socket', () => {
   describe('GET (findByUserID)', () => {

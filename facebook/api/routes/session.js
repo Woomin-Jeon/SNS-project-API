@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userService = require('../service/userService');
-const { socket } = require('../utils/socket');
+const { socket } = require('../socketio/socket');
 const funcRepo = require('../utils/methods');
 const validate = require('../middleware/validate');
 const validateSession = require('../middleware/validateSession');

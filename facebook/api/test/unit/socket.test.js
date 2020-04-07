@@ -1,4 +1,4 @@
-const { socket, socketIdStore } = require('../../utils/socket');
+const { socket, socketIdStore } = require('../../socketio/socket');
 
 describe('socketFunc', () => {
   let existentID;

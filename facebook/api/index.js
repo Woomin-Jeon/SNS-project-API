@@ -1,7 +1,8 @@
 const app = require('./app');
+const logger = require('./logs/winston');
 require('./models/index');
-require('./socketio/socketio');
+require('./socketio/index');
 
 app.listen(process.env.PORT, () => {
-  console.log(`* Server is running at port ${process.env.PORT}...`);
+  logger.info(`server is running on port ${process.env.PORT}...`);
 });

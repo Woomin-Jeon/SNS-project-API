@@ -2,6 +2,7 @@ const express = require('express');
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
+const logger = require('./logs/winston');
 
 const app = express();
 
@@ -27,8 +28,8 @@ app.use('/childcomments', require('./routes/childcomments'));
 app.use('/like', require('./routes/like'));
 app.use('/commentlike', require('./routes/commentlike'));
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send('Server error!');
+  logger.error(err.stack);
+  res.status(500).send('Server Error');
 });
 
 module.exports = app;
