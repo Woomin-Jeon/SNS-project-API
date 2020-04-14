@@ -322,3 +322,8 @@
 (2020-04-07) 10:34:01.952Z [error] error: ReferenceError: users is not defined
     at /home/woomin/pro/facebook/api/routes/login.js:12:25
     at processTicksAndRejections (internal/process/task_queues.js:94:5)
+(2020-04-10) 06:23:29.105Z [error] error: TypeError: Cannot read property 'pw' of null
+    at Object.checkPassword (/home/woomin/pro/facebook/api/utils/methods.js:5:17)
+    at /home/woomin/pro/facebook/api/routes/session.js:23:17
+    at runMicrotasks (<anonymous>)
+    at processTicksAndRejections (internal/process/task_queues.js:94:5)
