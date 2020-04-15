@@ -348,3 +348,23 @@
     at /home/woomin/pro/facebook/api/routes/upload.js:9:26
     at runMicrotasks (<anonymous>)
     at processTicksAndRejections (internal/process/task_queues.js:94:5)
+(2020-04-15) 07:40:03.133Z [error] error: TypeError: Cannot read property 'pw' of null
+    at Object.checkPassword (/home/woomin/pro/facebook/api/utils/methods.js:5:17)
+    at /home/woomin/pro/facebook/api/routes/session.js:23:17
+    at processTicksAndRejections (internal/process/task_queues.js:94:5)
+(2020-04-15) 07:40:03.847Z [error] error: TypeError: Cannot read property 'pw' of null
+    at Object.checkPassword (/home/woomin/pro/facebook/api/utils/methods.js:5:17)
+    at /home/woomin/pro/facebook/api/routes/session.js:23:17
+    at processTicksAndRejections (internal/process/task_queues.js:94:5)
+(2020-04-15) 07:40:41.619Z [error] error: TypeError: Cannot read property 'pw' of null
+    at Object.checkPassword (/home/woomin/pro/facebook/api/utils/methods.js:5:17)
+    at /home/woomin/pro/facebook/api/routes/session.js:23:17
+    at processTicksAndRejections (internal/process/task_queues.js:94:5)
+(2020-04-15) 07:42:01.563Z [error] error: TypeError: Cannot read property 'pw' of null
+    at Object.checkPassword (/home/woomin/pro/facebook/api/utils/methods.js:5:17)
+    at /home/woomin/pro/facebook/api/routes/session.js:23:17
+    at processTicksAndRejections (internal/process/task_queues.js:94:5)
+(2020-04-15) 07:42:31.414Z [error] error: TypeError: Cannot read property 'pw' of null
+    at Object.checkPassword (/home/woomin/pro/facebook/api/utils/methods.js:5:17)
+    at /home/woomin/pro/facebook/api/routes/session.js:23:17
+    at processTicksAndRejections (internal/process/task_queues.js:94:5)

@@ -10,7 +10,7 @@ db.once('open', function(){
   logger.info("mongoDB is connected on port 27017...");
 });
 
-mongoose.connect(process.env.DB_PRODUCT, {
+mongoose.connect(process.env.DB_DEVELOPMENT, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
