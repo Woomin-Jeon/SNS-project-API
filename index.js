@@ -5,6 +5,6 @@ require('./socketio/index');
 
 const port = process.env.PORT || 3000;
 
-app.listen(process.env.PORT, () => {
+app.listen(port, () => {
   logger.info(`server is running on port ${port}...`);
 });

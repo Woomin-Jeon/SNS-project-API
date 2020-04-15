@@ -2,6 +2,8 @@ const express = require('express');
 const session = require('express-session');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
+const helmet = require('helmet');
+const compression = require('compression');
 const logger = require('./logs/winston');
 const dotenv = require('dotenv');
 
@@ -15,6 +17,8 @@ Sentry.init({ dsn: process.env.SENTRY_DSN });
 app.use(express.json());
 app.use(cors({ origin: 'http://localhost:8080', credentials: true }));
 app.use(fileUpload());
+app.use(helmet());
+app.use(compression());
 app.use(session({
   secret : 'JEONWOOMINFACEBOOKSESSION',
   resave: true,
