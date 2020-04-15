@@ -29,7 +29,7 @@ app.use(session({
 app.use('/socket', require('./routes/socket'));
 app.use('/profile', require('./routes/profile'));
 app.use('/upload', require('./routes/upload'));
-app.use('https://woomin-facebook.herokuapp.com/session', require('./routes/session'));
+app.use('/session', require('./routes/session'));
 app.use('/login', require('./routes/login'));
 app.use('/friends', require('./routes/friends'));
 app.use('/posts', require('./routes/posts'));
