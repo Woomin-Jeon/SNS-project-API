@@ -15,7 +15,7 @@ const Sentry = require('@sentry/node');
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 
 app.use(express.json());
-app.use(cors({ origin: 'http://localhost:8080', credentials: true }));
+app.use(cors({ origin: 'https://woominsbook.netlify.com', credentials: true }));
 app.use(fileUpload());
 app.use(helmet());
 app.use(compression());
