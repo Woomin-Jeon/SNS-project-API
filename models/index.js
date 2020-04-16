@@ -11,6 +11,7 @@ db.once('open', function(){
 });
 
 mongoose.connect(process.env.MONGODB_URI, {
+  useCreateIndex: true,
   useUnifiedTopology: true,
   useNewUrlParser: true,
 }).catch(err => logger.info(err));
