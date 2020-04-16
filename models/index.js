@@ -4,8 +4,6 @@ const logger = require('../logs/winston');
 
 dotenv.config();
 
-const DB_URL = 'mongodb+srv://woomin:rkddnckd@cluster0-idrbb.mongodb.net/test?retryWrites=true&w=majority';
-
 const db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', function(){
