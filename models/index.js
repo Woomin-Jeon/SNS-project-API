@@ -4,13 +4,15 @@ const logger = require('../logs/winston');
 
 dotenv.config();
 
+const DB_URL = 'mongodb+srv://woomin:rkddnckd@cluster0-idrbb.mongodb.net/test?retryWrites=true&w=majority';
+
 const db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', function(){
-  logger.info("mongoDB is connected on port 27017...");
+  logger.info("MongoDB is connected ");
 });
 
-mongoose.connect(process.env.DB_PRODUCTION, {
+mongoose.connect(DB_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 });
