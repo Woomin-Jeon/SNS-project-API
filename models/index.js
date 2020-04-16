@@ -2,8 +2,11 @@ const mongoose = require('mongoose');
 const logger = require('../logs/winston');
 
 const db = mongoose.connection;
-db.on('error', logger.info('DB에 에러났음'));
-db.once('open', function(){
+db.on('error', (err) => {
+  logger.info(err);
+});
+
+db.once('open', () => {
   logger.info("mongoDB is connected");
 });
 
