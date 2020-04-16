@@ -7,10 +7,10 @@ dotenv.config();
 const db = mongoose.connection;
 db.on('error', console.error);
 db.once('open', function(){
-  logger.info("MongoDB is connected ");
+  logger.info("mongoDB... connect plz... I want you...love");
 });
 
-mongoose.connect(process.env.MONGODB_URL, {
+mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 }).catch(err => logger.info(err));
