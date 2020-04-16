@@ -15,6 +15,6 @@ db.once('open', function(){
 mongoose.connect(DB_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
-});
+}).catch(err => logger.info(err));
 
 module.exports = db;
