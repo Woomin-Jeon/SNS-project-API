@@ -7,6 +7,8 @@ db.once('open', function(){
   logger.info("mongoDB is connected");
 });
 
+logger.info(process.env.MONGODB_URI);
+
 mongoose.connect(process.env.MONGODB_URI, {
   useCreateIndex: true,
   useUnifiedTopology: true,
