@@ -12,7 +12,7 @@ db.once('open', function(){
   logger.info("MongoDB is connected ");
 });
 
-mongoose.connect(DB_URL, {
+mongoose.connect(process.env.MONGODB_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
 }).catch(err => logger.info(err));
