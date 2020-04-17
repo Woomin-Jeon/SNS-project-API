@@ -13,8 +13,7 @@ const methods = {
 
     const key =  await Key.find();
 
-    return new Date();
-    // return key[0].key;
+    return key[0].key;
   }
 };
 
