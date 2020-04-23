@@ -1,6 +1,5 @@
 const express = require('express');
 const session = require('express-session');
-const fileUpload = require('express-fileupload');
 const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
@@ -15,8 +14,7 @@ const Sentry = require('@sentry/node');
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 
 app.use(express.json());
-app.use(cors({ origin: 'https://woominsbook.netlify.app', credentials: true }));
-app.use(fileUpload());
+app.use(cors({ origin: process.env.LOCAL_ORIGIN, credentials: true }));
 app.use(helmet());
 app.use(compression());
 app.use(session({
