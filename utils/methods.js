@@ -2,6 +2,9 @@ const Key = require('../models/key');
 
 const methods = {
   checkPassword(user, pw) {
+    if (!user) {
+      return false;
+    }
     return user.pw === pw;
   },
 

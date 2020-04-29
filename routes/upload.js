@@ -24,7 +24,6 @@ const upload = multer({
 });
 
 router.post('/', upload.single('woomin-facebook'), (req, res) => {
-  console.log(req);
   const filePath = { url: req.file.location };
 
   res.send({ filePath });

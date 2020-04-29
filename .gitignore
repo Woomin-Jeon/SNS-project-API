@@ -2,3 +2,4 @@ node_modules
 jest.config.js
 error.logs
 info.logs
+.env

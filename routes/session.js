@@ -21,7 +21,7 @@ router.post('/', wrapAsync(async (req, res) => {
   const user = await userService.getUserById(userID);
 
   if (!funcRepo.checkPassword(user, userPW)) {
-    res.status(400).send({ status: 400, user: null });
+    res.status(200).send({ status: 400, user: null });
     return;
   }
 

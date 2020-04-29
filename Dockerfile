@@ -5,9 +5,9 @@ WORKDIR /facebook-api
 COPY package.json .
 COPY package-lock.json .
 
-RUN npm install
-
 COPY . .
 
+RUN npm install --production
+
 EXPOSE 7000
-CMD [ "nodemon", "index.js" ]
+CMD [ "npm", "start" ]

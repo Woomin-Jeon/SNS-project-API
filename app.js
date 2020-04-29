@@ -22,6 +22,10 @@ app.use(session({
   resave: true,
   saveUninitialized: false,
   cookie: {},
+  // cookie: {
+  //   sameSite: 'none',
+  //   domain: 'woomin-facebook.s3-website.ap-northeast-2.amazonaws.com',
+  // },
 }));
 
 app.use('/socket', require('./routes/socket'));
