@@ -6,8 +6,8 @@
   "scripts": {
     "start": "nodemon index.js",
     "test": "jest",
-    "integration": "jest test/integration/*.test.js --watchAll --runInBand --verbose",
-    "unit": "jest test/unit/*.test.js --watchAll --runInBand --verbose"
+    "integration": "jest test/integration/*.test.js --runInBand --verbose",
+    "unit": "jest test/unit/*.test.js --runInBand --verbose"
   },
   "keywords": [],
   "author": "",

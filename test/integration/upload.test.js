@@ -12,7 +12,7 @@ describe('/upload', () => {
       it('responds json file', async () => {
         const res = await request(app).post('/upload')
           .set('Content-Type', 'multipart/form-data')
-          .attach('file', '../FrontEnd/img/undefinedme.jpeg');
+          .attach('file', './img/67me.jpeg');
 
         expect(res.body).toBeDefined();
       });

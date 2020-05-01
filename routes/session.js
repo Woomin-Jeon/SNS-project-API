@@ -11,7 +11,7 @@ const wrapAsync = require('../middleware/wrapAsync');
 router.get('/', validate(validateSession), wrapAsync(async (req, res) => {
   const user = await userService.findBySession(req);
 
-  res.status(200).send({ user });
+  res.status(200).json({ user });
 }));
 
 // 로그인 (세션 및 socket.id 저장)
@@ -30,8 +30,8 @@ router.post('/', wrapAsync(async (req, res) => {
   await userService.onlineStatus(userID, true);
 
   req.session.userID = user._id;
-
-  res.send({ user });
+console.log(req.session)
+  res.status(200).json({ user });
 }));
 
 // 로그아웃 (세션 및 socket.id 제거)
@@ -42,7 +42,7 @@ router.patch('/', wrapAsync(async (req, res) => {
   await userService.onlineStatus(userID, false);
   req.session.destroy();
 
-  res.status(200).send();
+  res.status(200).json();
 }));
 
 module.exports = router;

@@ -151,7 +151,7 @@ if (process.env.NODE_ENV === 'test') {
 
           expect(res.body.user).toBeNull();
           expect(res.header['set-cookie']).toBeUndefined();
-          expect(res.status).toBe(400);
+          expect(res.status).toBe(200);
         });
       });
 
