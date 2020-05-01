@@ -46,7 +46,7 @@ $ npm run integration : Integration Test
 
 ## 구현 API
 
-| **-About User-** |                   |
+| **About User** |                   |
 | -------------- | ----------------- |
 | GET /session   | 세션 확인         |
 | POST /session  | 로그인            |
@@ -60,7 +60,7 @@ $ npm run integration : Integration Test
 
 <br />
 
-| **-About Post-** |                   |
+| **About Post** |                   |
 | -------------- | ----------------- |
 | GET /posts     | 게시글 불러오기   |
 | PATCH /posts   | 게시글 수정       |
@@ -71,7 +71,7 @@ $ npm run integration : Integration Test
 
 <br />
 
-| **-About Comment-**  |                |
+| **About Comment**  |                |
 | ------------------ | -------------- |
 | GET /comments      | 댓글 불러오기  |
 | POST /comments     | 댓글 달기      |
