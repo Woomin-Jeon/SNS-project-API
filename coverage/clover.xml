@@ -1,56 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1588299804079" clover="3.2.0">
-  <project timestamp="1588299804079" name="All files">
-    <metrics statements="344" coveredstatements="340" conditionals="10" coveredconditionals="9" methods="76" coveredmethods="74" elements="430" coveredelements="423" complexity="0" loc="344" ncloc="344" packages="9" files="29" classes="29"/>
+<coverage generated="1586175505158" clover="3.2.0">
+  <project timestamp="1586175505159" name="All files">
+    <metrics statements="324" coveredstatements="324" conditionals="8" coveredconditionals="8" methods="73" coveredmethods="73" elements="405" coveredelements="405" complexity="0" loc="324" ncloc="324" packages="7" files="28" classes="28"/>
     <package name="api">
-      <metrics statements="31" coveredstatements="31" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <metrics statements="24" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="app.js" path="/home/woomin/pro/facebook/api/app.js">
-        <metrics statements="31" coveredstatements="31" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <metrics statements="24" coveredstatements="24" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="11" type="stmt"/>
         <line num="2" count="11" type="stmt"/>
         <line num="3" count="11" type="stmt"/>
         <line num="4" count="11" type="stmt"/>
-        <line num="5" count="11" type="stmt"/>
         <line num="6" count="11" type="stmt"/>
-        <line num="7" count="11" type="stmt"/>
+        <line num="8" count="11" type="stmt"/>
         <line num="9" count="11" type="stmt"/>
+        <line num="10" count="11" type="stmt"/>
         <line num="11" count="11" type="stmt"/>
-        <line num="13" count="11" type="stmt"/>
-        <line num="14" count="11" type="stmt"/>
-        <line num="16" count="11" type="stmt"/>
-        <line num="17" count="11" type="stmt"/>
         <line num="18" count="11" type="stmt"/>
         <line num="19" count="11" type="stmt"/>
         <line num="20" count="11" type="stmt"/>
-        <line num="31" count="11" type="stmt"/>
-        <line num="32" count="11" type="stmt"/>
-        <line num="33" count="11" type="stmt"/>
+        <line num="21" count="11" type="stmt"/>
+        <line num="22" count="11" type="stmt"/>
+        <line num="23" count="11" type="stmt"/>
+        <line num="24" count="11" type="stmt"/>
+        <line num="25" count="11" type="stmt"/>
+        <line num="26" count="11" type="stmt"/>
+        <line num="27" count="11" type="stmt"/>
+        <line num="28" count="11" type="stmt"/>
+        <line num="29" count="11" type="stmt"/>
+        <line num="30" count="18" type="stmt"/>
+        <line num="31" count="18" type="stmt"/>
         <line num="34" count="11" type="stmt"/>
-        <line num="35" count="11" type="stmt"/>
-        <line num="36" count="11" type="stmt"/>
-        <line num="37" count="11" type="stmt"/>
-        <line num="38" count="11" type="stmt"/>
-        <line num="39" count="11" type="stmt"/>
-        <line num="40" count="11" type="stmt"/>
-        <line num="41" count="11" type="stmt"/>
-        <line num="42" count="11" type="stmt"/>
-        <line num="43" count="19" type="stmt"/>
-        <line num="44" count="19" type="stmt"/>
-        <line num="47" count="11" type="stmt"/>
-      </file>
-    </package>
-    <package name="api.logs">
-      <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
-      <file name="winston.js" path="/home/woomin/pro/facebook/api/logs/winston.js">
-        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
-        <line num="1" count="12" type="stmt"/>
-        <line num="3" count="12" type="stmt"/>
-        <line num="12" count="29" type="stmt"/>
-        <line num="23" count="29" type="stmt"/>
-        <line num="24" count="29" type="stmt"/>
-        <line num="35" count="19" type="stmt"/>
-        <line num="36" count="19" type="stmt"/>
-        <line num="43" count="12" type="stmt"/>
       </file>
     </package>
     <package name="api.middleware">
@@ -77,13 +56,13 @@
       <file name="wrapAsync.js" path="/home/woomin/pro/facebook/api/middleware/wrapAsync.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="11" type="stmt"/>
-        <line num="2" count="198" type="stmt"/>
-        <line num="3" count="43" type="stmt"/>
+        <line num="2" count="209" type="stmt"/>
+        <line num="3" count="44" type="stmt"/>
         <line num="7" count="11" type="stmt"/>
       </file>
     </package>
     <package name="api.models">
-      <metrics statements="38" coveredstatements="38" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
+      <metrics statements="37" coveredstatements="37" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
       <file name="comment.js" path="/home/woomin/pro/facebook/api/models/comment.js">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="1" count="12" type="stmt"/>
@@ -112,17 +91,16 @@
         <line num="32" count="13" type="stmt"/>
       </file>
       <file name="test_db.js" path="/home/woomin/pro/facebook/api/models/test_db.js">
-        <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <metrics statements="9" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="10" type="stmt"/>
         <line num="2" count="10" type="stmt"/>
-        <line num="3" count="10" type="stmt"/>
-        <line num="5" count="10" type="stmt"/>
+        <line num="4" count="10" type="stmt"/>
+        <line num="6" count="10" type="stmt"/>
         <line num="7" count="10" type="stmt"/>
         <line num="8" count="10" type="stmt"/>
         <line num="9" count="10" type="stmt"/>
-        <line num="10" count="10" type="stmt"/>
-        <line num="13" count="10" type="stmt"/>
-        <line num="18" count="10" type="stmt"/>
+        <line num="12" count="10" type="stmt"/>
+        <line num="17" count="10" type="stmt"/>
       </file>
       <file name="user.js" path="/home/woomin/pro/facebook/api/models/user.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
@@ -187,7 +165,7 @@
       </file>
     </package>
     <package name="api.routes">
-      <metrics statements="163" coveredstatements="160" conditionals="4" coveredconditionals="4" methods="21" coveredmethods="19"/>
+      <metrics statements="161" coveredstatements="161" conditionals="4" coveredconditionals="4" methods="21" coveredmethods="21"/>
       <file name="childcomments.js" path="/home/woomin/pro/facebook/api/routes/childcomments.js">
         <metrics statements="10" coveredstatements="10" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="1" count="11" type="stmt"/>
@@ -324,7 +302,7 @@
         <line num="16" count="11" type="stmt"/>
       </file>
       <file name="session.js" path="/home/woomin/pro/facebook/api/routes/session.js">
-        <metrics statements="29" coveredstatements="29" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
+        <metrics statements="28" coveredstatements="28" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
         <line num="1" count="11" type="stmt"/>
         <line num="2" count="11" type="stmt"/>
         <line num="3" count="11" type="stmt"/>
@@ -345,7 +323,6 @@
         <line num="28" count="6" type="stmt"/>
         <line num="30" count="6" type="stmt"/>
         <line num="32" count="5" type="stmt"/>
-        <line num="33" count="5" type="stmt"/>
         <line num="34" count="5" type="stmt"/>
         <line num="38" count="11" type="stmt"/>
         <line num="39" count="2" type="stmt"/>
@@ -370,19 +347,18 @@
         <line num="18" count="11" type="stmt"/>
       </file>
       <file name="upload.js" path="/home/woomin/pro/facebook/api/routes/upload.js">
-        <metrics statements="12" coveredstatements="9" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
+        <metrics statements="11" coveredstatements="11" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
         <line num="1" count="11" type="stmt"/>
         <line num="2" count="11" type="stmt"/>
         <line num="3" count="11" type="stmt"/>
         <line num="4" count="11" type="stmt"/>
-        <line num="5" count="11" type="stmt"/>
         <line num="7" count="11" type="stmt"/>
-        <line num="13" count="11" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="26" count="11" type="stmt"/>
-        <line num="27" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="32" count="11" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="17" count="11" type="stmt"/>
       </file>
     </package>
     <package name="api.service">
@@ -427,9 +403,19 @@
         <line num="38" count="12" type="stmt"/>
       </file>
     </package>
-    <package name="api.socketio">
-      <metrics statements="12" coveredstatements="12" conditionals="2" coveredconditionals="2" methods="5" coveredmethods="5"/>
-      <file name="socket.js" path="/home/woomin/pro/facebook/api/socketio/socket.js">
+    <package name="api.utils">
+      <metrics statements="19" coveredstatements="19" conditionals="2" coveredconditionals="2" methods="7" coveredmethods="7"/>
+      <file name="methods.js" path="/home/woomin/pro/facebook/api/utils/methods.js">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="15" type="stmt"/>
+        <line num="3" count="15" type="stmt"/>
+        <line num="5" count="9" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="19" count="15" type="stmt"/>
+      </file>
+      <file name="socket.js" path="/home/woomin/pro/facebook/api/utils/socket.js">
         <metrics statements="12" coveredstatements="12" conditionals="2" coveredconditionals="2" methods="5" coveredmethods="5"/>
         <line num="1" count="12" type="stmt"/>
         <line num="3" count="12" type="stmt"/>
@@ -443,21 +429,6 @@
         <line num="21" count="2" type="stmt"/>
         <line num="25" count="12" type="stmt"/>
         <line num="26" count="12" type="stmt"/>
-      </file>
-    </package>
-    <package name="api.utils">
-      <metrics statements="9" coveredstatements="8" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
-      <file name="methods.js" path="/home/woomin/pro/facebook/api/utils/methods.js">
-        <metrics statements="9" coveredstatements="8" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
-        <line num="1" count="15" type="stmt"/>
-        <line num="3" count="15" type="stmt"/>
-        <line num="5" count="9" type="cond" truecount="1" falsecount="1"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="8" count="9" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="17" count="1" type="stmt"/>
-        <line num="19" count="1" type="stmt"/>
-        <line num="23" count="15" type="stmt"/>
       </file>
     </package>
   </project>
