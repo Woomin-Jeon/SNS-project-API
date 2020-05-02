@@ -26,10 +26,11 @@ jobs:
       - name: Unit test start
         run: npm run unit
 
-      - name: Integration test start
-        env:
-          DB_TEST: ${{ secrets.DB_TEST }}
-        run: npm run integration
+#      통합테스트 20분동안 돌길래 일단 주석처리함
+#      - name: Integration test start
+#        env:
+#          DB_TEST: ${{ secrets.DB_TEST }}
+#        run: npm run integration
 
 #      - name: Deploy to S3
 #        env:
