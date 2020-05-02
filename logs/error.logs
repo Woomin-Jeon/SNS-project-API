@@ -771,3 +771,38 @@
     at SBMH.emit (events.js:223:5)
     at SBMH.EventEmitter.emit (domain.js:475:20)
     at SBMH._sbmh_feed (/home/woomin/pro/facebook/api/node_modules/streamsearch/lib/sbmh.js:159:14)
+(2020-05-02) 01:11:18.463Z [error] error: undefined
+(2020-05-02) 01:11:18.531Z [error] error: undefined
+(2020-05-02) 01:11:18.645Z [error] error: undefined
+(2020-05-02) 01:11:18.752Z [error] error: undefined
+(2020-05-02) 01:11:19.307Z [error] error: undefined
+(2020-05-02) 01:11:19.374Z [error] error: undefined
+(2020-05-02) 01:11:19.424Z [error] error: undefined
+(2020-05-02) 01:11:19.877Z [error] error: undefined
+(2020-05-02) 01:11:19.935Z [error] error: undefined
+(2020-05-02) 01:11:19.999Z [error] error: undefined
+(2020-05-02) 01:11:20.472Z [error] error: undefined
+(2020-05-02) 01:11:20.540Z [error] error: undefined
+(2020-05-02) 01:11:21.031Z [error] error: undefined
+(2020-05-02) 01:11:21.103Z [error] error: undefined
+(2020-05-02) 01:11:21.559Z [error] error: undefined
+(2020-05-02) 01:11:22.000Z [error] error: undefined
+(2020-05-02) 01:11:22.439Z [error] error: undefined
+(2020-05-02) 01:11:22.779Z [error] error: undefined
+(2020-05-02) 01:11:23.488Z [error] error: MulterError: Unexpected field
+    at wrappedFileFilter (/home/woomin/pro/facebook/api/node_modules/multer/index.js:40:19)
+    at Busboy.<anonymous> (/home/woomin/pro/facebook/api/node_modules/multer/lib/make-middleware.js:114:7)
+    at Busboy.emit (events.js:223:5)
+    at Busboy.EventEmitter.emit (domain.js:475:20)
+    at Busboy.emit (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/busboy/lib/main.js:38:33)
+    at PartStream.<anonymous> (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/busboy/lib/types/multipart.js:213:13)
+    at PartStream.emit (events.js:223:5)
+    at PartStream.EventEmitter.emit (domain.js:475:20)
+    at HeaderParser.<anonymous> (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/dicer/lib/Dicer.js:51:16)
+    at HeaderParser.emit (events.js:223:5)
+    at HeaderParser.EventEmitter.emit (domain.js:475:20)
+    at HeaderParser._finish (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/dicer/lib/HeaderParser.js:68:8)
+    at SBMH.<anonymous> (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/dicer/lib/HeaderParser.js:40:12)
+    at SBMH.emit (events.js:223:5)
+    at SBMH.EventEmitter.emit (domain.js:475:20)
+    at SBMH._sbmh_feed (/home/woomin/pro/facebook/api/node_modules/streamsearch/lib/sbmh.js:159:14)

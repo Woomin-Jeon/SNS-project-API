@@ -1438,3 +1438,48 @@
     at SBMH.EventEmitter.emit (domain.js:475:20)
     at SBMH._sbmh_feed (/home/woomin/pro/facebook/api/node_modules/streamsearch/lib/sbmh.js:159:14)
 (2020-05-01) 02:27:06.096Z [info] info: TEST DB ON
+(2020-05-02) 01:11:18.381Z [info] info: TEST DB ON
+(2020-05-02) 01:11:18.463Z [info] error: undefined
+(2020-05-02) 01:11:18.530Z [info] error: undefined
+(2020-05-02) 01:11:18.645Z [info] error: undefined
+(2020-05-02) 01:11:18.752Z [info] error: undefined
+(2020-05-02) 01:11:19.209Z [info] info: TEST DB ON
+(2020-05-02) 01:11:19.307Z [info] error: undefined
+(2020-05-02) 01:11:19.374Z [info] error: undefined
+(2020-05-02) 01:11:19.424Z [info] error: undefined
+(2020-05-02) 01:11:19.826Z [info] info: TEST DB ON
+(2020-05-02) 01:11:19.877Z [info] error: undefined
+(2020-05-02) 01:11:19.935Z [info] error: undefined
+(2020-05-02) 01:11:19.999Z [info] error: undefined
+(2020-05-02) 01:11:20.370Z [info] info: TEST DB ON
+(2020-05-02) 01:11:20.472Z [info] error: undefined
+(2020-05-02) 01:11:20.540Z [info] error: undefined
+(2020-05-02) 01:11:20.900Z [info] info: TEST DB ON
+(2020-05-02) 01:11:21.030Z [info] error: undefined
+(2020-05-02) 01:11:21.103Z [info] error: undefined
+(2020-05-02) 01:11:21.455Z [info] info: TEST DB ON
+(2020-05-02) 01:11:21.558Z [info] error: undefined
+(2020-05-02) 01:11:21.914Z [info] info: TEST DB ON
+(2020-05-02) 01:11:22.000Z [info] error: undefined
+(2020-05-02) 01:11:22.363Z [info] info: TEST DB ON
+(2020-05-02) 01:11:22.439Z [info] error: undefined
+(2020-05-02) 01:11:22.765Z [info] info: TEST DB ON
+(2020-05-02) 01:11:22.779Z [info] error: undefined
+(2020-05-02) 01:11:23.487Z [info] error: MulterError: Unexpected field
+    at wrappedFileFilter (/home/woomin/pro/facebook/api/node_modules/multer/index.js:40:19)
+    at Busboy.<anonymous> (/home/woomin/pro/facebook/api/node_modules/multer/lib/make-middleware.js:114:7)
+    at Busboy.emit (events.js:223:5)
+    at Busboy.EventEmitter.emit (domain.js:475:20)
+    at Busboy.emit (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/busboy/lib/main.js:38:33)
+    at PartStream.<anonymous> (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/busboy/lib/types/multipart.js:213:13)
+    at PartStream.emit (events.js:223:5)
+    at PartStream.EventEmitter.emit (domain.js:475:20)
+    at HeaderParser.<anonymous> (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/dicer/lib/Dicer.js:51:16)
+    at HeaderParser.emit (events.js:223:5)
+    at HeaderParser.EventEmitter.emit (domain.js:475:20)
+    at HeaderParser._finish (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/dicer/lib/HeaderParser.js:68:8)
+    at SBMH.<anonymous> (/home/woomin/pro/facebook/api/node_modules/multer/node_modules/dicer/lib/HeaderParser.js:40:12)
+    at SBMH.emit (events.js:223:5)
+    at SBMH.EventEmitter.emit (domain.js:475:20)
+    at SBMH._sbmh_feed (/home/woomin/pro/facebook/api/node_modules/streamsearch/lib/sbmh.js:159:14)
+(2020-05-02) 01:11:23.709Z [info] info: TEST DB ON
