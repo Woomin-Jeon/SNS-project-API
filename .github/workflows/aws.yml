@@ -27,6 +27,8 @@ jobs:
         run: npm run unit
 
       - name: Integration test start
+        env:
+          DB_TEST: ${{ secrets.DB_TEST }}
         run: npm run integration
 
 #      - name: Deploy to S3
