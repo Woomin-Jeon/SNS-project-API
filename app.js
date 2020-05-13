@@ -24,6 +24,16 @@ app.use(session({
   cookie: {},
 }));
 
+/*
+app.all('/*', function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'http://woomin-facebook.s3-website.ap-northeast-2.amazonaws.com');
+  res.header('Access-Control-Allow-Methods', 'POST, PUT, GET, DELETE');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');
+  res.header('Access-Control-Allow-Credentials', true);
+  next();
+});
+*/
+
 app.use('/socket', require('./routes/socket'));
 app.use('/profile', require('./routes/profile'));
 app.use('/upload', require('./routes/upload'));
