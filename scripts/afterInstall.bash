@@ -1,0 +1,4 @@
+cd /home/ubuntu/build
+npm install
+docker build -t dal96k/woomin-facebook-codedeploy:latest .
+docker run --publish 7070:7070 -it --detach --name woomin-facebook-codedeploy dal96k/woomin-facebook-codedeploy:latest /bin/bash

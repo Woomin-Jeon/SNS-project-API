@@ -14,7 +14,7 @@ const Sentry = require('@sentry/node');
 Sentry.init({ dsn: process.env.SENTRY_DSN });
 
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:8080", credentials: true }));
+app.use(cors({ origin: "http://woomin-facebook.s3-website.ap-northeast-2.amazonaws.com", credentials: true }));
 app.use(helmet());
 app.use(compression());
 app.use(session({
@@ -24,7 +24,6 @@ app.use(session({
   cookie: {},
 }));
 
-/*
 app.all('/*', function(req, res, next) {
   res.header('Access-Control-Allow-Origin', 'http://woomin-facebook.s3-website.ap-northeast-2.amazonaws.com');
   res.header('Access-Control-Allow-Methods', 'POST, PUT, GET, DELETE');
@@ -32,7 +31,6 @@ app.all('/*', function(req, res, next) {
   res.header('Access-Control-Allow-Credentials', true);
   next();
 });
-*/
 
 app.use('/socket', require('./routes/socket'));
 app.use('/profile', require('./routes/profile'));
