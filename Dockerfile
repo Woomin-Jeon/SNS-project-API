@@ -10,4 +10,4 @@ COPY . .
 RUN npm install --production
 
 EXPOSE 7070
-CMD [ "npm", "start" ]
+CMD npm start
