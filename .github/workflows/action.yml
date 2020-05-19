@@ -26,6 +26,13 @@ jobs:
       - name: Unit test start
         run: npm run unit
 
+      - name: Login to docker hub
+        if: success()
+        uses: actions-hub/docker/login@master
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_ID }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PW }}
+
       - name: Docker image build
         run: docker build -t dal96k/woomin-facebook:latest .
 
