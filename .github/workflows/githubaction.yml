@@ -38,4 +38,4 @@ jobs:
 
       - name: Docker image push to DockerHub
         if: success()
-        run: push dal96k/woomin-facebook/latest
+        run: docker push dal96k/woomin-facebook/latest
