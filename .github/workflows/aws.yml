@@ -26,18 +26,8 @@ jobs:
       - name: Unit test start
         run: npm run unit
 
-#      통합테스트 20분동안 돌길래 일단 주석처리함
-#      - name: Integration test start
-#        env:
-#          DB_TEST: ${{ secrets.DB_TEST }}
-#        run: npm run integration
+      - name: Docker image build
+        run: docker build -t dal96k/woomin-facebook:latest .
 
-#      - name: Deploy to S3
-#        env:
-#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-#        run: |
-#          aws s3 cp \
-#            --recursive \
-#            --region ap-northeast-2 \
-#            dist s3://woomin-facebook
+      - name: Docker image push to DockerHub
+        run: docker push dal96k/woomin-facebook:latest
