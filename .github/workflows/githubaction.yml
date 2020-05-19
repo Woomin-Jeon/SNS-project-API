@@ -34,13 +34,8 @@ jobs:
           repository: dal96k/woomin-facebook
           tags: latest
 
-      - name: run codeDeploy
-        run: aws deploy \
-          --region ap-northeast-2 create-deployment \
-          --application-name woomin-facebook \
-          --deployment-config-name CodeDeployDefault.OneAtATime
-          --deployment-group-name woomin-facebook-codedeploy \
-          --github-location repository=Woomin-Jeon/facebook-clone-server,commitId=${GITHUB_SHA}
+      - name: Trigger the CodeDeploy in EC2 instance
+        run: aws deploy --region ap-northeast-2 create-deployment --application-name woomin-facebook --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name woomin-facebook-codedeploy --github-location repository=Woomin-Jeon/facebook-clone-server,commitId=${GITHUB_SHA}
 
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
