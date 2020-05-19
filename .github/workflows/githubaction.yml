@@ -37,4 +37,7 @@ jobs:
         run: docker build -t dal96k/woomin-facebook:latest .
 
       - name: Docker image push to DockerHub
-        run: docker push dal96k/woomin-facebook:latest
+        if: success()
+          uses: actions-hub/docker@master
+          with:
+            args: push dal96k/woomin-facebook/latest
