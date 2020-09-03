@@ -21,8 +21,8 @@ router.post('/', validate(validatePost), wrapAsync(async (req, res) => {
 }));
 
 // 게시글 삭제
-router.delete('/:uniquekey', wrapAsync(async (req, res) => {
-  const uniquekey = req.params.uniquekey;
+router.delete('/del', wrapAsync(async (req, res) => {
+  const { uniquekey } = req.body;
 
   await postService.removePost(uniquekey);
   const posts = await postService.getAllPosts();
