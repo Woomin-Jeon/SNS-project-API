@@ -24,7 +24,7 @@ app.use(session({
   cookie: {},
 }));
 
-app.all('/*', (req, res, next) => {
+app.use('/', (req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://ec2-13-209-47-198.ap-northeast-2.compute.amazonaws.com:7000');
   res.header('Access-Control-Allow-Methods', 'POST, PUT, GET, DELETE');
   res.header('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type');

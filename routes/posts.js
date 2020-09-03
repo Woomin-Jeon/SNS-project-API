@@ -27,9 +27,7 @@ router.delete('/:uniquekey', wrapAsync(async (req, res) => {
   await postService.removePost(uniquekey);
   const posts = await postService.getAllPosts();
 
-  res
-    .header('Access-Control-Allow-Methods', 'POST, PUT, GET, DELETE')
-    .status(200).send({ timeLinePosts: posts });
+  res.status(200).send({ timeLinePosts: posts });
 }));
 
 // 게시글 수정
