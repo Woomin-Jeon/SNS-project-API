@@ -21,7 +21,7 @@ router.post('/', validate(validatePost), wrapAsync(async (req, res) => {
 }));
 
 // 게시글 삭제
-router.delete('/del', wrapAsync(async (req, res) => {
+router.patch('/del', wrapAsync(async (req, res) => {
   const { uniquekey } = req.body;
 
   await postService.removePost(uniquekey);
